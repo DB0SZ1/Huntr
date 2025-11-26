@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Job Hunter</title>
+        <link rel="stylesheet" href="assets/css/dash.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* Additional admin-specific styles */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-free { background: rgba(156, 163, 175, 0.2); color: #9CA3AF; }
+        .badge-pro { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .badge-premium { background: rgba(168, 85, 247, 0.2); color: #A855F7; }
+        .badge-success { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .badge-warning { background: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+        .badge-admin { background: rgba(239, 68, 68, 0.3); color: #FFF; margin-left: 8px; }
+        
+        .users-table {
+            margin-top: 20px;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1fr 1fr 1fr 1.5fr;
+            gap: 16px;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+        
+        .table-header-row {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-warning { background: rgba(251, 191, 36, 0.2); }
+        .btn-warning:hover { background: rgba(251, 191, 36, 0.3); }
+        .btn-danger { background: rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.3); }
+        .btn-success { background: rgba(34, 197, 94, 0.2); }
+        .btn-success:hover { background: rgba(34, 197, 94, 0.3); }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-filters {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .filter-select, .search-input {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .search-input {
+            width: 250px;
+        }
+        
+        .health-metrics, .metric-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .health-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .health-item span {
+            min-width: 120px;
+            opacity: 0.8;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .metric-item i {
+            font-size: 24px;
+            opacity: 0.8;
+        }
+        
+        .metric-item strong {
+            font-size: 24px;
+            display: block;
+        }
+        
+        .metric-item span {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .spinning {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="background">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+    </div>
+
+    <!-- Cursor Glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar visible" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="sidebar-logo-text">Admin Panel</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Subscriptions</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-server"></i>
+                    <span>Monitoring</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-download"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-user">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name admin-name">Admin</div>
+                    <div class="user-email admin-email">admin@jobhunter.com</div>
+                </div>
+                <button class="logout-btn-sidebar" onclick="logoutUser()" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Content loaded dynamically by admin.js -->
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p>Loading admin dashboard...</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/admin.js"></script>
+</body>
+</html>

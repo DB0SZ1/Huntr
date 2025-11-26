@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing - Niche Finder</title>
+    <link rel="stylesheet" href="/assets/css/auth.css">
+    <script src="/assets/js/api.js"></script>
+    <style>
+        /* Additional styles specific to payment callback page */
+        .callback-container {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .spinner::before {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            margin-top: -40px;
+            margin-left: -40px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: rgba(255, 255, 255, 0.8);
+            animation: spinner 0.8s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scale-in {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .status-icon.success {
+            color: #4ade80;
+        }
+
+        .status-icon.error {
+            color: #f87171;
+        }
+
+        .callback-heading {
+            color: #FFFFFF;
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .callback-message {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .payment-details {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        .payment-details p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+        .payment-details strong {
+            color: #FFFFFF;
+        }
+
+        .error-details {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: left;
+        }
+
+        .error-details p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .action-button {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 
+                0 12px 32px rgba(0, 0, 0, 0.6),
+                0 0 24px rgba(255, 255, 255, 0.15);
+        }
+
+        .action-button:active {
+            transform: translateY(-1px) scale(0.99);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-button.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: dot-pulse 1.4s ease-in-out infinite;
+        }
+
+        .progress-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .progress-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dot-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        #loadingState {
+            display: block;
+        }
+
+        #successState,
+        #errorState,
+        #pendingState {
+            display: none;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .hide {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Black Background with White Floating Bubbles -->
+    <div class="auth-background">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+    </div>
+
+    <!-- Liquid Glass Container -->
+    <div class="auth-container">
+        <div class="callback-container">
+            <!-- Loading State -->
+            <div id="loadingState">
+                <div class="spinner"></div>
+                <h2 class="callback-heading">Processing Payment</h2>
+                <p class="callback-message">Please wait while we process your payment securely...</p>
+                <div class="progress-dots">
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="successState">
+                <div class="status-icon success">✓</div>
+                <h2 class="callback-heading">Payment Successful!</h2>
+                <p class="callback-message">Your subscription has been upgraded successfully.</p>
+                
+                <div class="payment-details" id="paymentDetails" style="display: none;">
+                    <p><strong>Transaction Reference:</strong> <span id="refNumber"></span></p>
+                    <p><strong>Plan:</strong> <span id="planName"></span></p>
+                    <p><strong>Status:</strong> <span id="paymentStatus"></span></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-button" onclick="goToDashboard()">
+                        Go to Dashboard
+                    </button>
+                    <button class="action-button secondary" onclick="viewSubscription()">
+                        View Subscription
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pending State -->
+            <div id="pendingState">
+                <div class="spinner"></div>
+                <h2 class="callback-heading">Payment Pending</h2>
+                <p class="callback-message">Your payment is being verified. Please wait...</p>
+                
+                <div class="payment-details">
+                    <p>Reference: <span id="pendingRefNumber"></span></p>
+                    <p>We're confirming your payment. This usually takes a few moments.</p>
+                </div>
+
+                <div class="progress-dots">
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState">
+                <div class="status-icon error">✕</div>
+                <h2 class="callback-heading">Payment Failed</h2>
+                <p class="callback-message" id="errorMessage">We encountered an issue while processing your payment.</p>
+                
+                <div class="error-details" id="errorDetails" style="display: none;">
+                    <p id="errorDetailsText"></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-button" onclick="retryPayment()">
+                        Try Again
+                    </button>
+                    <button class="action-button secondary" onclick="goToDashboard()">
+                        Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const PAYMENT_VERIFICATION_TIMEOUT = 30000; // 30 seconds
+        const PAYMENT_CHECK_INTERVAL = 2000; // 2 seconds
+        const MAX_RETRIES = 5;
+
+        let verificationAttempts = 0;
+        let paymentReference = null;
+        let accessToken = null;
+
+        // Show specific state
+        function showState(state) {
+            const states = ['loadingState', 'successState', 'errorState', 'pendingState'];
+            states.forEach(s => {
+                const element = document.getElementById(s);
+                if (element) {
+                    if (s === state + 'State') {
+                        element.classList.add('show');
+                        element.classList.remove('hide');
+                    } else {
+                        element.classList.remove('show');
+                        element.classList.add('hide');
+                    }
+                }
+            });
+        }
+
+        async function handlePaymentCallback() {
+            try {
+                // Verify authentication first
+                accessToken = localStorage.getItem('access_token');
+                if (!accessToken) {
+                    throw new Error('You must be logged in to complete this payment. Please log in and try again.');
+                }
+
+                // Get query parameters from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                // Payment reference (from payment provider)
+                paymentReference = urlParams.get('reference') || urlParams.get('txn_ref');
+                
+                // Check for payment errors
+                const error = urlParams.get('error');
+                const status = urlParams.get('status');
+
+                console.log('🔍 Payment Callback Parameters:');
+                console.log('Reference:', paymentReference);
+                console.log('Status:', status);
+                console.log('Error:', error);
+
+                if (error) {
+                    throw new Error(decodeURIComponent(error) || 'Payment was cancelled or failed.');
+                }
+
+                if (!paymentReference) {
+                    throw new Error('No payment reference received. Payment verification failed.');
+                }
+
+                // Start verification process
+                await verifyPaymentWithRetry();
+
+            } catch (error) {
+                console.error('Payment callback error:', error);
+                showError(error.message || 'Payment processing failed');
+            }
+        }
+
+        async function verifyPaymentWithRetry() {
+            try {
+                showState('pending');
+                document.getElementById('pendingRefNumber').textContent = paymentReference;
+
+                const maxAttempts = MAX_RETRIES;
+                let lastError = null;
+
+                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                    try {
+                        console.log(`Verification attempt ${attempt}/${maxAttempts}`);
+                        
+                        const verification = await API.verifyPayment(paymentReference);
+                        
+                        console.log('✅ Payment verification response:', verification);
+
+                        // Check for success indicators
+                        if (verification && (
+                            verification.status === 'success' || 
+                            verification.status === 'completed' ||
+                            verification.data?.status === 'success' ||
+                            verification.data?.status === 'completed'
+                        )) {
+                            handlePaymentSuccess(verification);
+                            return;
+                        }
+
+                        // Check for failure indicators
+                        if (verification && (
+                            verification.status === 'failed' || 
+                            verification.status === 'cancelled' ||
+                            verification.data?.status === 'failed' ||
+                            verification.data?.status === 'cancelled'
+                        )) {
+                            throw new Error(
+                                verification.message || 
+                                verification.data?.message || 
+                                'Payment verification failed'
+                            );
+                        }
+
+                        // Still pending, wait before retrying
+                        if (attempt < maxAttempts) {
+                            console.log(`Payment still pending, retrying in ${PAYMENT_CHECK_INTERVAL}ms...`);
+                            await new Promise(resolve => setTimeout(resolve, PAYMENT_CHECK_INTERVAL));
+                        }
+
+                    } catch (attemptError) {
+                        console.error(`Attempt ${attempt} failed:`, attemptError);
+                        lastError = attemptError;
+
+                        if (attempt < maxAttempts) {
+                            await new Promise(resolve => setTimeout(resolve, PAYMENT_CHECK_INTERVAL));
+                        }
+                    }
+                }
+
+                // All retries exhausted
+                throw lastError || new Error('Payment verification timed out. Please check your email for confirmation.');
+
+            } catch (error) {
+                console.error('Verification failed:', error);
+                showError(error.message || 'Could not verify payment');
+            }
+        }
+
+        function handlePaymentSuccess(verification) {
+            try {
+                showState('success');
+
+                // Extract payment details from response
+                const data = verification.data || verification;
+                const paymentDetails = {
+                    reference: paymentReference,
+                    plan: data.plan_name || data.plan || 'Premium',
+                    status: 'Completed'
+                };
+
+                // Display payment details
+                document.getElementById('refNumber').textContent = paymentDetails.reference;
+                document.getElementById('planName').textContent = paymentDetails.plan;
+                document.getElementById('paymentStatus').textContent = paymentDetails.status;
+                document.getElementById('paymentDetails').style.display = 'block';
+
+                console.log('✅ Payment successful:', paymentDetails);
+
+                // Optionally redirect after delay for auto-flow
+                // setTimeout(() => goToDashboard(), 3000);
+
+            } catch (error) {
+                console.error('Error handling payment success:', error);
+                showError('Payment was successful but we encountered an error updating your account.');
+            }
+        }
+
+        function showError(message, details = null) {
+            showState('error');
+            
+            document.getElementById('errorMessage').textContent = message;
+            
+            if (details) {
+                document.getElementById('errorDetailsText').textContent = details;
+                document.getElementById('errorDetails').style.display = 'block';
+            }
+            
+            console.error('Payment Error:', message, details);
+        }
+
+        function goToDashboard() {
+            // Clear payment reference from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Redirect to dashboard
+            window.location.href = '/dashboard.html';
+        }
+
+        function viewSubscription() {
+            // Clear payment reference from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Go to dashboard with subscription section highlighted
+            window.location.href = '/dashboard.html?section=subscription';
+        }
+
+        function retryPayment() {
+            // Clear payment reference from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Redirect back to upgrade/pricing
+            window.location.href = '/dashboard.html?section=upgrade';
+        }
+
+        // Handle browser back button
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Page was loaded from cache, reload to ensure fresh state
+                window.location.reload();
+            }
+        });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', function(event) {
+            if (document.getElementById('loadingState').classList.contains('show') || 
+                document.getElementById('pendingState').classList.contains('show')) {
+                // Show warning if user tries to leave during payment processing
+                event.preventDefault();
+                event.returnValue = 'Payment is still being processed. Are you sure you want to leave?';
+            }
+        });
+
+        // Start the callback process when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', handlePaymentCallback);
+        } else {
+            // DOM already loaded
+            handlePaymentCallback();
+        }
+    </script>
+</body>
+</html>

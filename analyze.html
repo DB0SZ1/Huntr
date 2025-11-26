@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try Niche Finder - Free Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="assets/css/analyze.css">
+        <script src="assets/js/api.js"></script>
+        <script src="assets/js/theme.js"></script>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-sun theme-icon" id="sunIcon"></i>
+        <i class="fas fa-moon theme-icon hidden" id="moonIcon"></i>
+    </button>
+
+    <div class="auth-background">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+    </div>
+
+    <div class="analysis-container">
+        <!-- Header -->
+        <div class="analysis-header">
+            <div class="header-badge">✨ Try it Free</div>
+            <h1 class="analysis-title">Find Your Next Opportunity</h1>
+            <p class="analysis-subtitle">
+                Enter your niche and let our AI scan thousands of job boards and platforms to find perfect matches for you
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section" id="inputSection">
+            <label class="input-label">What's your niche?</label>
+            <div class="niche-input-wrapper">
+                <input 
+                    type="text" 
+                    class="niche-input" 
+                    id="nicheInput"
+                    placeholder="e.g., React Developer, UI/UX Designer, Content Writer..."
+                    autocomplete="off"
+                >
+            </div>
+            <div class="examples">
+                <span class="example-tag" onclick="fillExample('React Developer')">React Developer</span>
+                <span class="example-tag" onclick="fillExample('UI/UX Designer')">UI/UX Designer</span>
+                <span class="example-tag" onclick="fillExample('Content Writer')">Content Writer</span>
+                <span class="example-tag" onclick="fillExample('Product Manager')">Product Manager</span>
+            </div>
+            <button class="start-analysis-btn" id="startBtn" disabled>
+                <i class="fas fa-rocket"></i>
+                Start Free Analysis
+            </button>
+        </div>
+
+        <!-- Analysis Progress -->
+        <div class="analysis-progress" id="analysisProgress">
+            <div class="progress-header">
+                <div class="progress-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h2 class="progress-title">Analyzing...</h2>
+                <p class="progress-subtitle">Scanning multiple platforms for opportunities</p>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="progress-step" id="step1">
+                    <div class="step-icon"><i class="fas fa-search"></i></div>
+                    <span>Searching job boards...</span>
+                </div>
+                <div class="progress-step" id="step2">
+                    <div class="step-icon"><i class="fas fa-filter"></i></div>
+                    <span>Filtering relevant opportunities...</span>
+                </div>
+                <div class="progress-step" id="step3">
+                    <div class="step-icon"><i class="fas fa-check"></i></div>
+                    <span>Preparing results...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <div class="results-badge">🎉 Analysis Complete</div>
+                <h2 class="results-title">Found 3 Opportunities</h2>
+                <p class="results-subtitle" id="resultsNiche">For your niche</p>
+            </div>
+
+            <div class="opportunities-grid">
+                <!-- Opportunity 1 - Unlocked -->
+                <div class="opportunity-card" onclick="openJobModal()">
+                    <div class="opp-header">
+                        <div class="opp-platform">LinkedIn</div>
+                        <div class="opp-time">2 hours ago</div>
+                    </div>
+                    <h3 class="opp-title" id="opp1Title">Senior React Developer</h3>
+                    <div class="opp-company">TechCorp Inc.</div>
+                    <div class="opp-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        <span><i class="fas fa-dollar-sign"></i> $120k - $150k</span>
+                        <span><i class="fas fa-briefcase"></i> Full-time</span>
+                    </div>
+                    <div class="opp-tags">
+                        <span class="opp-tag" id="tag1-1">React</span>
+                        <span class="opp-tag" id="tag1-2">TypeScript</span>
+                        <span class="opp-tag" id="tag1-3">Node.js</span>
+                    </div>
+                </div>
+
+                <!-- Opportunity 2 - Locked -->
+                <div class="opportunity-card locked">
+                    <div class="opp-header">
+                        <div class="opp-platform">Web3.career</div>
+                        <div class="opp-time">5 hours ago</div>
+                    </div>
+                    <h3 class="opp-title" id="opp2Title">Frontend Engineer</h3>
+                    <div class="opp-company">CryptoDesign Labs</div>
+                    <div class="opp-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        <span><i class="fas fa-dollar-sign"></i> $90k - $130k</span>
+                        <span><i class="fas fa-briefcase"></i> Contract</span>
+                    </div>
+                    <div class="opp-tags">
+                        <span class="opp-tag">Vue.js</span>
+                        <span class="opp-tag">Web3</span>
+                        <span class="opp-tag">CSS</span>
+                    </div>
+                    <div class="unlock-overlay">
+                        <div class="unlock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="unlock-text">Sign up to view this opportunity</div>
+                        <button class="unlock-btn" onclick="redirectToSignup()">
+                            <i class="fas fa-user-plus"></i>
+                            Create Free Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Opportunity 3 - Locked -->
+                <div class="opportunity-card locked">
+                    <div class="opp-header">
+                        <div class="opp-platform">Twitter/X</div>
+                        <div class="opp-time">1 day ago</div>
+                    </div>
+                    <h3 class="opp-title" id="opp3Title">Full Stack Developer</h3>
+                    <div class="opp-company">DeFi Protocol</div>
+                    <div class="opp-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Hybrid</span>
+                        <span><i class="fas fa-dollar-sign"></i> $110k - $140k</span>
+                        <span><i class="fas fa-briefcase"></i> Full-time</span>
+                    </div>
+                    <div class="opp-tags">
+                        <span class="opp-tag">React</span>
+                        <span class="opp-tag">Node.js</span>
+                        <span class="opp-tag">MongoDB</span>
+                    </div>
+                    <div class="unlock-overlay">
+                        <div class="unlock-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="unlock-text">Sign up to view this opportunity</div>
+                        <button class="unlock-btn" onclick="redirectToSignup()">
+                            <i class="fas fa-user-plus"></i>
+                            Create Free Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2 class="cta-title">Want to See All Opportunities?</h2>
+                <p class="cta-subtitle">
+                    Create a free account to unlock all opportunities, get real-time alerts, and access advanced filtering options
+                </p>
+                <div class="cta-features">
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <div class="cta-feature-text">Unlimited Scans</div>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="cta-feature-text">Real-time Alerts</div>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <div class="cta-feature-text">Advanced Filters</div>
+                    </div>
+                    <div class="cta-feature">
+                        <div class="cta-feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="cta-feature-text">10+ Platforms</div>
+                    </div>
+                </div>
+                <div class="cta-buttons">
+                    <button class="cta-btn cta-btn-primary" onclick="redirectToSignup()">
+                        <i class="fas fa-user-plus"></i>
+                        Create Free Account
+                    </button>
+                    <button class="cta-btn cta-btn-secondary" onclick="redirectToLogin()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Already have an account?
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Details Modal -->
+    <div class="job-modal" id="jobModal">
+        <div class="job-modal-content">
+            <button class="job-modal-close" onclick="closeJobModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="job-modal-header">
+                <div class="job-modal-platform">LinkedIn</div>
+                <h2 class="job-modal-title" id="modalTitle">Senior React Developer</h2>
+                <div class="job-modal-company">TechCorp Inc.</div>
+            </div>
+
+            <div class="job-modal-meta">
+                <div class="job-modal-meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Remote</span>
+                </div>
+                <div class="job-modal-meta-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>$120k - $150k</span>
+                </div>
+                <div class="job-modal-meta-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Full-time</span>
+                </div>
+                <div class="job-modal-meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>2 hours ago</span>
+                </div>
+            </div>
+
+            <div class="job-modal-tags">
+                <span class="job-modal-tag" id="modalTag1">React</span>
+                <span class="job-modal-tag" id="modalTag2">TypeScript</span>
+                <span class="job-modal-tag" id="modalTag3">Node.js</span>
+            </div>
+
+            <div class="job-modal-section">
+                <h3>About the Role</h3>
+                <p id="modalDescription">
+                    We're looking for an experienced React developer to join our growing team. 
+                    You'll work on cutting-edge web applications that serve millions of users worldwide. 
+                    This is a unique opportunity to make a significant impact on our product and help shape 
+                    the future of our engineering culture.
+                </p>
+            </div>
+
+            <div class="job-modal-section">
+                <h3>Requirements</h3>
+                <ul id="modalRequirements">
+                    <li>5+ years of experience with React and modern JavaScript</li>
+                    <li>Strong understanding of TypeScript and its best practices</li>
+                    <li>Experience with Node.js and RESTful API development</li>
+                    <li>Excellent problem-solving and communication skills</li>
+                    <li>Experience with state management libraries (Redux, MobX, etc.)</li>
+                </ul>
+            </div>
+
+            <div class="job-modal-section">
+                <h3>What We Offer</h3>
+                <ul id="modalBenefits">
+                    <li>Competitive salary with equity options</li>
+                    <li>100% remote work flexibility</li>
+                    <li>Health, dental, and vision insurance</li>
+                    <li>Unlimited PTO and flexible working hours</li>
+                    <li>Professional development budget</li>
+                    <li>Latest hardware and tools of your choice</li>
+                </ul>
+            </div>
+
+            <div class="job-modal-actions">
+                <button class="job-modal-btn job-modal-btn-primary" onclick="applyForJob()">
+                    <i class="fas fa-paper-plane"></i>
+                    Apply Now
+                </button>
+                <button class="job-modal-btn job-modal-btn-secondary" onclick="saveJob()">
+                    <i class="fas fa-bookmark"></i>
+                    Save for Later
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/analyze.js"></script>
+</body>
+</html>

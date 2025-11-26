@@ -1,0 +1,1 @@
+            const priceDisplay = plan.price === 0 ? 'Free' : `₦${plan.price.toLocaleString()}/mo`;

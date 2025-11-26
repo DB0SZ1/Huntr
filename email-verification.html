@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Niche Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+    <style>
+        .verification-container {
+            text-align: center;
+        }
+        
+        .verification-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        .verification-icon.success {
+            color: #00cc00;
+        }
+        
+        .verification-icon.error {
+            color: #ff4444;
+        }
+        
+        .verification-icon.loading {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .status-message {
+            font-size: 16px;
+            margin: 20px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .status-details {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 10px 0 30px 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-background">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="verification-container">
+            <div class="verification-icon loading" id="statusIcon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+
+            <h2 class="auth-heading" id="statusTitle">Verifying Email...</h2>
+            <p class="status-details" id="statusDetails">Please wait while we verify your email address</p>
+
+            <div class="action-buttons" id="actionButtons" style="display: none;">
+                <a href="auth.html" class="action-btn secondary">Back to Sign In</a>
+                <a href="dashboard.html" class="action-btn" id="dashboardBtn" style="display: none;">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/auth-api.js"></script>
+    <script src="assets/js/email-verification.js"></script>
+</body>
+</html>

@@ -1,0 +1,4785 @@
+Job Hunter API
+ 2.1.0 
+OAS 3.1
+/openapi.json
+Multi-tenant job hunting platform with AI matching and admin dashboard
+
+default
+
+
+GET
+/health
+Health Check
+
+
+GET
+/
+Root
+
+Authentication
+
+
+GET
+/api/auth/google/login
+Google Login
+
+Initiate Google OAuth flow Redirects user to Google's consent screen
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+
+GET
+/api/auth/google/callback
+Google Callback
+
+Handle Google OAuth callback Creates user if new, generates JWT tokens
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+
+POST
+/api/auth/refresh
+Refresh Access Token
+
+Refresh access token using refresh token
+
+Parameters
+Try it out
+Name	Description
+refresh_token *
+string
+(query)
+refresh_token
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/auth/me
+Get Current User
+
+Get current authenticated user's information Requires valid JWT token in Authorization header
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/logout
+Logout
+
+Logout endpoint (client-side token removal)
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+
+PUT
+/api/auth/profile
+Update Profile
+
+Update user profile settings
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "string",
+  "whatsapp_number": "string",
+  "email_notifications": true,
+  "whatsapp_notifications": true,
+  "timezone": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/onboarding
+Save Onboarding Data
+
+
+POST
+/api/auth/twilio-config
+Save Twilio Config
+
+Save encrypted Twilio credentials for user
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "account_sid": "string",
+  "auth_token": "string",
+  "whatsapp_number": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/auth/onboarding-status
+Check Onboarding Status
+
+Check if user has completed onboarding
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/signup
+Signup
+
+Traditional signup with email and password Sends verification email
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "email": "user@example.com",
+  "password": "string",
+  "name": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/login
+Login
+
+Traditional login with email and password Returns JWT tokens
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "email": "user@example.com",
+  "password": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/verify-email
+Verify Email
+
+Verify user email with token
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "token": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/forgot-password
+Forgot Password
+
+Request password reset Sends reset email
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "email": "user@example.com"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/reset-password
+Reset Password
+
+Reset password with token
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "token": "string",
+  "new_password": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/change-password
+Change Password
+
+Change password for authenticated user
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "old_password": "string",
+  "new_password": "string"
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Follow
+
+
+GET
+/api/auth/follow/status
+Get Follow Status
+
+Get user's follow status Shows modal on first login or if user hasn't followed yet
+
+Args: user_id: Current user ID db: Database connection
+
+Returns: Follow status and whether to show modal
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "has_followed": true,
+  "should_show_modal": true,
+  "twitter_url": "string",
+  "message": "string"
+}
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/follow/mark-followed
+Mark User Followed
+
+Mark user as having followed the Twitter account Called after user completes the follow action
+
+Args: request: Follow status request user_id: Current user ID db: Database connection
+
+Returns: Confirmation
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "followed": true
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/auth/follow/dismiss-modal
+Dismiss Follow Modal
+
+Dismiss the follow modal (user chose not to follow for now) Will show again after 7 days
+
+Args: user_id: Current user ID db: Database connection
+
+Returns: Confirmation
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Niches
+
+
+GET
+/api/niches
+List User Niches
+
+Get all niches for current user with optional filtering and pagination
+
+Args: user_id: Current user ID from JWT db: Database connection active_only: If True, return only active niches skip: Number of records to skip (pagination) limit: Maximum number of records to return
+
+Returns: List of user's niches
+
+Parameters
+Try it out
+Name	Description
+active_only
+boolean
+(query)
+Default value : false
+
+
+false
+skip
+integer
+(query)
+Default value : 0
+
+0
+limit
+integer
+(query)
+Default value : 100
+
+100
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "additionalProp1": {}
+}
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/niches
+Create Niche
+
+Create new niche configuration
+
+Args: niche_data: Validated niche data user_id: Current user ID from JWT db: Database connection
+
+Returns: Created niche with ID
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "string",
+  "description": "string",
+  "keywords": [
+    "string"
+  ],
+  "excluded_keywords": [
+    "string"
+  ],
+  "platforms": [
+    "string"
+  ],
+  "min_confidence": 60
+}
+Responses
+Code	Description	Links
+201	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/niches/{niche_id}
+Get Niche
+
+Get a single niche by ID
+
+Args: niche_id: Niche ID user_id: Current user ID from JWT db: Database connection
+
+Returns: Niche details
+
+Parameters
+Try it out
+Name	Description
+niche_id *
+string
+(path)
+niche_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+PUT
+/api/niches/{niche_id}
+Update Niche
+
+Update existing niche
+
+Args: niche_id: Niche ID to update niche_data: Validated update data user_id: Current user ID from JWT db: Database connection
+
+Returns: Update confirmation
+
+Parameters
+Try it out
+Name	Description
+niche_id *
+string
+(path)
+niche_id
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "string",
+  "description": "string",
+  "keywords": [
+    "string"
+  ],
+  "excluded_keywords": [
+    "string"
+  ],
+  "platforms": [
+    "string"
+  ],
+  "min_confidence": 100
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+DELETE
+/api/niches/{niche_id}
+Delete Niche
+
+Delete niche (soft delete option available)
+
+Args: niche_id: Niche ID to delete user_id: Current user ID from JWT db: Database connection
+
+Returns: Deletion confirmation
+
+Parameters
+Try it out
+Name	Description
+niche_id *
+string
+(path)
+niche_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/niches/{niche_id}/toggle
+Toggle Niche
+
+Activate/deactivate niche
+
+Args: niche_id: Niche ID to toggle user_id: Current user ID from JWT db: Database connection
+
+Returns: New status
+
+Parameters
+Try it out
+Name	Description
+niche_id *
+string
+(path)
+niche_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/niches/{niche_id}/stats
+Get Niche Stats
+
+Opportunities
+
+
+GET
+/api/opportunities
+Get User Opportunities
+
+Get opportunities for current user ONLY
+
+Parameters
+Try it out
+Name	Description
+skip
+integer
+(query)
+Default value : 0
+
+0
+minimum: 0
+limit
+integer
+(query)
+Default value : 20
+
+20
+maximum: 100
+minimum: 1
+platform
+string
+(query)
+platform
+saved_only
+boolean
+(query)
+Default value : false
+
+
+false
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/opportunities/{opportunity_id}
+Get Opportunity Details
+
+Get details of a specific opportunity
+
+Parameters
+Try it out
+Name	Description
+opportunity_id *
+string
+(path)
+opportunity_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+DELETE
+/api/opportunities/{opportunity_id}
+Delete Opportunity
+
+Delete an opportunity from user's list
+
+Parameters
+Try it out
+Name	Description
+opportunity_id *
+string
+(path)
+opportunity_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/opportunities/{opportunity_id}/save
+Save Opportunity
+
+Save/bookmark an opportunity
+
+Parameters
+Try it out
+Name	Description
+opportunity_id *
+string
+(path)
+opportunity_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/opportunities/{opportunity_id}/apply
+Mark Applied
+
+Mark opportunity as applied
+
+Parameters
+Try it out
+Name	Description
+opportunity_id *
+string
+(path)
+opportunity_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/opportunities/stats/summary
+Get Opportunity Stats
+
+Get summary statistics for user's opportunities
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/opportunities/platforms/available
+Get Available Platforms
+
+Get available platforms for user's tier
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Scans
+
+
+POST
+/api/scans/start
+Start Scan
+
+Start a new scan
+
+FREE tier: Manual only (costs 5 credits)
+PRO/PREMIUM: Manual or automatic
+Returns: Scan ID and status
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/scans/status/{scan_id}
+Get Scan Status
+
+Get status of a scan (only own scans)
+
+Parameters
+Try it out
+Name	Description
+scan_id *
+string
+(path)
+scan_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/scans/history
+Get Scan History
+
+Get user's scan history (only own scans)
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 20
+
+20
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Dashboard
+
+
+GET
+/api/dashboard/overview
+Get Dashboard Overview
+
+
+GET
+/api/dashboard/stats
+Get Dashboard Stats
+
+Get detailed dashboard statistics
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/activity
+Get Dashboard Activity
+
+Get user's recent activity
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 20
+
+20
+maximum: 100
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/keywords
+Get Top Keywords
+
+Get top performing keywords for user's opportunities
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 10
+
+10
+maximum: 50
+minimum: 1
+days
+integer
+(query)
+Default value : 30
+
+30
+maximum: 90
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/keywords/trending
+Get Trending Keywords
+
+Get trending keywords across all user opportunities
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 10
+
+10
+maximum: 50
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/config/pricing
+Get Pricing Config
+
+Get pricing and tier information
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+
+GET
+/api/dashboard/settings
+Get User Settings
+
+Get user settings
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+PUT
+/api/dashboard/settings
+Update User Settings
+
+Update user settings
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "additionalProp1": {}
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/usage
+Get Usage Stats
+
+Get user's monthly usage statistics
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/dashboard/email-preferences
+Update Email Preferences
+
+Update user's email notification preferences
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "additionalProp1": {}
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/dashboard/email-preferences
+Get Email Preferences
+
+Get user's email notification preferences
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Payments
+
+
+GET
+/api/payments/plans
+Get Subscription Plans
+
+Get available subscription plans with pricing and features
+
+Returns: List of available paid plans (Pro, Premium)
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+
+POST
+/api/payments/initialize
+Initialize Payment
+
+Initialize Paystack payment for subscription upgrade
+
+Args: payment_request: {"tier": "pro" or "premium"} user_id: Current authenticated user ID db: Database connection
+
+Returns: Paystack authorization URL and reference
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "tier": "string",
+  "additionalProp1": {}
+}
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/payments/verify/{reference}
+Verify Payment
+
+Verify payment status with Paystack
+
+Args: reference: Payment reference from Paystack user_id: Current authenticated user ID db: Database connection
+
+Returns: Payment verification status
+
+Parameters
+Try it out
+Name	Description
+reference *
+string
+(path)
+reference
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/payments/webhook
+Paystack Webhook
+
+
+GET
+/api/payments/subscription/current
+Get Current Subscription
+
+Get current user's subscription details
+
+Args: user_id: Current authenticated user ID db: Database connection
+
+Returns: Current subscription information
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/payments/subscription/cancel
+Cancel Subscription
+
+Cancel user's subscription (will remain active until period end)
+
+Args: user_id: Current authenticated user ID db: Database connection
+
+Returns: Cancellation confirmation
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Credits
+
+
+GET
+/api/credits/balance
+Get Credit Balance
+
+Get user's current credit balance
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/credits/summary
+Get Credit Summary
+
+Get comprehensive credit summary
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/credits/history
+Get Credit History
+
+Get user's credit transaction history
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 20
+
+20
+maximum: 100
+minimum: 1
+skip
+integer
+(query)
+Default value : 0
+
+0
+minimum: 0
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/credits/purchase
+Purchase Credits
+
+Purchase additional credits
+
+Parameters
+Try it out
+Name	Description
+amount *
+integer
+(query)
+amount
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/credits/tier-limits
+Get Tier Limits
+
+Get tier limits comparison
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/credits/check/scan
+Check Credits For Scan
+
+Check if user has enough credits for scan
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Admin Dashboard
+
+
+GET
+/api/admin/stats/overview
+Get Admin Overview
+
+Get admin dashboard overview statistics
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/admin/users
+List All Users
+
+List all users with filtering
+
+Parameters
+Try it out
+Name	Description
+skip
+integer
+(query)
+Default value : 0
+
+0
+minimum: 0
+limit
+integer
+(query)
+Default value : 50
+
+50
+maximum: 100
+minimum: 1
+tier
+string
+(query)
+tier
+status
+string
+(query)
+status
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/admin/users/{user_id}
+Get User Details
+
+Get detailed user information
+
+Parameters
+Try it out
+Name	Description
+user_id *
+string
+(path)
+user_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+PUT
+/api/admin/users/{user_id}/tier
+Update User Tier
+
+Update user subscription tier
+
+Parameters
+Try it out
+Name	Description
+user_id *
+string
+(path)
+user_id
+new_tier *
+string
+(query)
+new_tier
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/admin/revenue/breakdown
+Get Revenue Breakdown
+
+Get revenue breakdown by tier and month
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/admin/activity
+Get Admin Activity
+
+Get recent admin actions and system activity
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 50
+
+50
+maximum: 100
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/admin/users/{user_id}/suspend
+Suspend User
+
+Suspend/deactivate user account
+
+Parameters
+Try it out
+Name	Description
+user_id *
+string
+(path)
+user_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/admin/users/{user_id}/activate
+Activate User
+
+Reactivate user account
+
+Parameters
+Try it out
+Name	Description
+user_id *
+string
+(path)
+user_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Monitoring
+
+
+GET
+/api/monitoring/health
+Get System Health
+
+Get comprehensive system health metrics
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/monitoring/api-metrics
+Get Api Metrics
+
+Get API usage metrics
+
+Parameters
+Try it out
+Name	Description
+hours
+integer
+(query)
+Default value : 24
+
+24
+maximum: 168
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/monitoring/scraper-status
+Get Scraper Status
+
+Get scraper health and performance
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/monitoring/active-sessions
+Get Active Sessions
+
+Get count of active user sessions
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/monitoring/errors
+Get Recent Errors
+
+Get recent system errors
+
+Parameters
+Try it out
+Name	Description
+hours
+integer
+(query)
+Default value : 24
+
+24
+maximum: 168
+minimum: 1
+limit
+integer
+(query)
+Default value : 50
+
+50
+maximum: 200
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Reports
+
+
+GET
+/api/reports/signups
+Get Signups Report
+
+Get signups report for last N days
+
+Parameters
+Try it out
+Name	Description
+days
+integer
+(query)
+Default value : 30
+
+30
+maximum: 365
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/reports/revenue
+Get Revenue Report
+
+Get revenue report for last N months
+
+Parameters
+Try it out
+Name	Description
+months
+integer
+(query)
+Default value : 3
+
+3
+maximum: 12
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/reports/engagement
+Get Engagement Report
+
+Get user engagement report
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/reports/platform-stats
+Get Platform Stats
+
+Get statistics by platform
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Promotions
+
+
+POST
+/api/promo/import-csv
+Import Promo Users
+
+
+POST
+/api/promo/validate
+Validate Promo
+
+
+POST
+/api/promo/redeem
+Redeem Promo
+
+
+GET
+/api/promo/available
+Get Available Promos
+
+Get all available promo users (not yet redeemed)
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/promo/redeemed
+Get Redeemed Promos
+
+Get all redeemed promo users (admin only)
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/promo/active-trials
+Get Active Trials
+
+Get all active promotional trials
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/promo/check-expirations
+Check Trial Expirations
+
+Check for expired trials and downgrade users Called daily by scheduler
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Curated Gigs
+
+
+GET
+/api/curated/weekly-top-20
+Get Weekly Top 20
+
+Get top 20 curated gigs for the week
+
+Automatically performs scans based on tier
+Filters scams using AI detection
+Scores opportunities by niche match
+Returns curated results with salary info
+Returns: - Weekly top 20 gigs - Scam risk indicators - Salary information - Niche match scores
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/curated/save-gig/{gig_id}
+Save Curated Gig
+
+Save a curated gig to user's collection
+
+Parameters
+Try it out
+Name	Description
+gig_id *
+string
+(path)
+gig_id
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/curated/saved
+Get Saved Gigs
+
+Get all saved curated gigs
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 50
+
+50
+maximum: 100
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/curated/feedback/{gig_id}
+Submit Gig Feedback
+
+Submit feedback on curated gig for personalization
+
+Parameters
+Try it out
+Name	Description
+gig_id *
+string
+(path)
+gig_id
+feedback_type *
+string
+(query)
+Available values : applied, rejected, saved
+
+
+applied
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/curated/recommendations/personalized
+Get Personalized Recommendations
+
+Get personalized recommendations based on user feedback
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 10
+
+10
+maximum: 50
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/curated/email-digest/configure
+Configure Email Digest
+
+Configure email digest settings
+
+Parameters
+Try it out
+Name	Description
+frequency *
+string
+(query)
+Available values : never, daily, weekly
+
+
+never
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/curated/email-digest/preview
+Preview Email Digest
+
+Preview weekly digest email content
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/curated/niches/{niche_id}/optimize
+Optimize Niche
+
+
+POST
+/api/curated/scams/report/{gig_id}
+Report Scam
+
+User reports scam (false positive/negative) to improve detection
+
+Parameters
+Try it out
+Name	Description
+gig_id *
+string
+(path)
+gig_id
+report_type *
+string
+(query)
+Available values : false_positive, missed_scam, other
+
+
+false_positive
+reason
+string
+(query)
+reason
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/curated/niches/{niche_id}/analytics
+Get Niche Analytics
+
+Get detailed performance analytics for a niche
+
+Parameters
+Try it out
+Name	Description
+niche_id *
+string
+(path)
+niche_id
+days
+integer
+(query)
+Default value : 30
+
+30
+maximum: 90
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/curated/analytics/salary-trends
+Get Salary Trends
+
+Analyze salary trends across opportunities
+
+Parameters
+Try it out
+Name	Description
+days
+integer
+(query)
+Default value : 30
+
+30
+maximum: 90
+minimum: 1
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+Document Analysis
+
+
+POST
+/api/documents/cv/analyze-lite
+Analyze Cv Lite
+
+Analyze CV (Pro tier and above) Lightweight analysis with top skills, experience level, and recommendations
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+multipart/form-data
+file *
+string($binary)
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/documents/cv/analyze-premium
+Analyze Cv Premium
+
+Premium CV Analysis (Premium tier only) Includes ATS score, keywords, career trajectory, salary expectations
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+multipart/form-data
+file *
+string($binary)
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+POST
+/api/documents/proof-of-work/analyze
+Analyze Proof Of Work
+
+Analyze Proof of Work (Premium tier only) Portfolio quality, complexity, tech stack, innovation score
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Request body
+
+multipart/form-data
+file *
+string($binary)
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+GET
+/api/documents/analyses/history
+Get Analysis History
+
+Get user's document analysis history
+
+Parameters
+Try it out
+Name	Description
+authorization
+string | (string | null)
+(header)
+authorization
+Responses
+Code	Description	Links
+200	
+Successful Response
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+"string"
+No links
+422	
+Validation Error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "detail": [
+    {
+      "loc": [
+        "string",
+        0
+      ],
+      "msg": "string",
+      "type": "string"
+    }
+  ]
+}
+No links
+
+Schemas
+Body_analyze_cv_lite_api_documents_cv_analyze_lite_postExpand allobject
+Body_analyze_cv_premium_api_documents_cv_analyze_premium_postExpand allobject
+Body_analyze_proof_of_work_api_documents_proof_of_work_analyze_postExpand allobject
+Body_import_promo_users_api_promo_import_csv_postExpand allobject
+ChangePasswordRequestExpand allobject
+FollowStatusResponseExpand allobject
+ForgotPasswordRequestExpand allobject
+HTTPValidationErrorExpand allobject
+LoginRequestExpand allobject
+MarkFollowedRequestExpand allobject
+NicheCreateExpand allobject
+NicheUpdateExpand allobject
+OnboardingDataRequestExpand allobject
+PaymentRequestExpand allobject
+ProfileUpdateRequestExpand allobject
+PromoValidationResponseExpand allobject
+RedeemPromoRequestExpand allobject
+ResetPasswordRequestExpand allobject
+SignupRequestExpand allobject
+TwilioConfigRequestExpand allobject
+ValidationErrorExpand allobject
+VerifyEmailRequestExpand allobject

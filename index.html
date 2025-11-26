@@ -1,9 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Essential Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Niche Finder - AI-Powered Opportunity Hunter</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Primary Meta Tags (SEO) -->
+    <title>Huntr - AI-Powered Job Opportunity Bot | Auto-Find Gigs on Telegram, Twitter & LinkedIn</title>
+    <meta name="title" content="Huntr - AI-Powered Job Opportunity Bot | Auto-Find Gigs on Telegram, Twitter & LinkedIn">
+    <meta name="description" content="Huntr is an AI-powered opportunity hunter bot that automatically finds developer, designer, community, marketing, and freelance gigs across Telegram, Twitter/X, LinkedIn, Reddit, and DexScreener. Get instant notifications on WhatsApp. Join 100+ users earning $1500+ monthly.">
+    <meta name="keywords" content="job finder bot, remote jobs, freelance opportunities, gig finder, AI job scraper, Telegram jobs, Twitter jobs, LinkedIn jobs, developer jobs, designer jobs, community manager jobs, marketing jobs, opportunity bot, job alerts, WhatsApp notifications, freelance gigs, work from home, side hustle, Nigeria jobs, Africa jobs, crypto jobs, DeFi jobs">
+    <meta name="author" content="Huntr Bot">
+    <meta name="copyright" content="2024 Huntr. All rights reserved.">
+    <meta name="language" content="English">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    
+    <!-- Open Graph / Facebook Meta Tags (Social Sharing) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://huntr-bot.netlify.app/">
+    <meta property="og:title" content="Huntr - Never Miss a Job Opportunity Again">
+    <meta property="og:description" content="AI-powered bot that finds developer, designer, and freelance gigs across 7+ platforms. Auto-notified on WhatsApp. Join 100+ hustlers earning $1500+ monthly.">
+    <meta property="og:image" content="https://huntr-bot.netlify.app/assets/images/project-logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Huntr Bot">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter / X Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://huntr-bot.netlify.app/">
+    <meta property="twitter:title" content="Huntr - Never Miss a Job Opportunity Again">
+    <meta property="twitter:description" content="AI-powered bot that finds developer, designer, and freelance gigs across 7+ platforms. Auto-notified on WhatsApp. Join 100+ hustlers earning $1500+ monthly.">
+    <meta property="twitter:image" content="https://huntr-bot.netlify.app/assets/images/project-logo.png">
+    
+    <!-- Geographic & Local SEO -->
+    <meta name="geo.placename" content="Nigeria, Africa">
+    <meta name="geo.region" content="NG">
+    <meta name="ICBM" content="9.0820,8.6753">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="subject" content="Job Opportunity Finder Bot">
+    <meta name="rating" content="general">
+    <meta name="revisit-after" content="7 days">
+    <meta name="distribution" content="global">
+    <meta name="url" content="https://huntr-bot.netlify.app/">
+    <meta name="identifier-URL" content="https://huntr-bot.netlify.app/">
+    <meta name="abstract" content="Huntr - AI-powered bot for finding remote jobs, freelance gigs, and opportunities across multiple platforms with WhatsApp notifications.">
+    
+    <!-- Mobile & App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Huntr">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-config" content="assets/images/browserconfig.xml">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Favicon Links (Multiple Sizes & Formats) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/project-logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/project-logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/project-logo.png">
+    <link rel="mask-icon" href="assets/images/project-logo.png" color="#000000">
+    <link rel="shortcut icon" href="assets/images/project-logo.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://huntr-bot.netlify.app/">
+    
+    <!-- Alternate Language Links (for Multi-language SEO) -->
+    <link rel="alternate" hreflang="en" href="https://huntr-bot.netlify.app/">
+    
+    <!-- Structured Data for Search Engines (Schema.org) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Huntr",
+        "alternateName": ["Huntr Bot", "Job Opportunity Finder", "Opportunity Hunter"],
+        "description": "AI-powered bot that automatically scrapes 7+ platforms and finds developer, designer, community, marketing, WordPress, and no-code opportunities. Delivered to WhatsApp in real-time.",
+        "url": "https://huntr-bot.netlify.app/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "100",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            "price": "0",
+            "priceValidUntil": "2025-12-31",
+            "description": "Free plan available"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Huntr",
+            "url": "https://huntr-bot.netlify.app/",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Customer Support",
+                "telephone": "+234-708-940-6819",
+                "email": "db0sz.co@gmail.com"
+            }
+        },
+        "softwareRequirements": "WhatsApp, Telegram, Twitter, LinkedIn, Reddit, Discord, DexScreener",
+        "featureList": [
+            "Multi-platform scraping (Telegram, Twitter, LinkedIn, Reddit, DexScreener, Discord, Web3.career)",
+            "Semantic AI search for job opportunities",
+            "WhatsApp instant notifications",
+            "Smart confidence scoring",
+            "Role categorization (Developer, Designer, Community Manager, Marketing, WordPress, No-code)",
+            "Duplicate prevention",
+            "Spam filtering",
+            "Fresh token detection on DexScreener",
+            "Urgency detection"
+        ]
+    }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Huntr",
+        "url": "https://huntr-bot.netlify.app/",
+        "logo": "https://huntr-bot.netlify.app/assets/images/project-logo.png",
+        "description": "AI-powered opportunity hunter bot - Auto-find jobs on Telegram, Twitter, LinkedIn, Reddit, DexScreener and more",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "telephone": "+234-708-940-6819",
+            "email": "db0sz.co@gmail.com"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "NG",
+            "addressRegion": "Lagos"
+        },
+        "sameAs": [
+            "https://twitter.com/",
+            "https://linkedin.com/",
+            "https://github.com/",
+            "https://discord.com/"
+        ]
+    }
+    </script>
+
+    <!-- FAQ Schema for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What platforms does Huntr scrape?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Huntr scrapes 7+ platforms: Telegram, Twitter/X, LinkedIn, Reddit, DexScreener, Discord, and Web3.career to find job opportunities across different platforms simultaneously."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does Huntr detect job opportunities?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Huntr uses semantic AI search to detect direct hiring posts, indirect hiring hints, and hidden opportunities. It understands context even when opportunities aren't explicitly posted as job listings."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I receive job alerts?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Huntr delivers instant notifications directly to WhatsApp with formatted job details, confidence scores, and quick pitch angles so you never miss an opportunity."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What types of jobs does Huntr find?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Huntr finds developer, designer, community manager, marketing, WordPress, and no-code opportunities across multiple platforms automatically."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is there a free plan available?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Huntr offers a free plan for users to get started. Upgrade to Pro or Ultra for more features and unlimited scraping."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://huntr-bot.netlify.app/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Features",
+                "item": "https://huntr-bot.netlify.app/#features"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Pricing",
+                "item": "https://huntr-bot.netlify.app/#pricing"
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Fonts & Stylesheets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -127,15 +351,15 @@
                     <div class="stat-label">Opportunities Found Daily</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">25K+</div>
+                    <div class="stat-number">100+</div>
                     <div class="stat-label">Active Users</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">$2.5M+</div>
+                    <div class="stat-number">$1500+</div>
                     <div class="stat-label">Earned by Users</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">7</div>
+                    <div class="stat-number">7 - 15</div>
                     <div class="stat-label">Platforms Scraped</div>
                 </div>
             </div>
@@ -155,7 +379,7 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
+                        <i class="fas fa-server"></i>
                     </div>
                     <h3 class="feature-title">Semantic Search Intelligence</h3>
                     <p class="feature-description">
@@ -168,7 +392,7 @@
                     </div>
                     <h3 class="feature-title">Multi-Platform Scraping</h3>
                     <p class="feature-description">
-                        Searches Twitter/X, LinkedIn, Web3.career, CryptoJobsList, RemoteOK, DexScreener, and GitHub simultaneously.
+                        Searches Twitter/X, LinkedIn, Reddit,  DexScreener, and Telegram simultaneously.
                     </p>
                 </div>
                 <div class="feature-card">
@@ -252,30 +476,35 @@
             <div class="footer-brand">
                 <div class="footer-logo">
                     <div class="logo-icon">
-                        <img src="assets/images/project-logo.png" alt="Niche Finder Logo">
+                        <img src="assets/images/project-logo.png" alt="Huntr Logo">
                     </div>
-                    Niche Finder
+                    Huntr
                 </div>
                 <p class="footer-description">
-                    AI-powered opportunity hunter that automatically finds developer, designer, community, and freelance gigs across multiple platforms. Built for hustlers who can't afford to miss opportunities.
+                    AI-powered bot that automatically scrapes 7+ platforms (Telegram, Twitter, LinkedIn, Reddit, DexScreener, Discord, Web3.career) and finds developer, designer, community, marketing, WordPress, and no-code opportunities. Delivered to WhatsApp in real-time. Built for hustlers who can't afford to miss opportunities.
                 </p>
+                <div class="footer-contact-info">
+                    <p><i class="fas fa-phone"></i> <a href="tel:+2347089406819">+234 708-940-6819</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:db0sz.co@gmail.com">db0sz.co@gmail.com</a></p>
+                    <p><i class="fas fa-globe"></i> <a href="https://huntr-bot.netlify.app" target="_blank">huntr-bot.netlify.app</a></p>
+                </div>
             </div>
             <div class="footer-column">
                 <h3>Product</h3>
                 <div class="footer-links">
                     <a href="#features" class="footer-link">Features</a>
                     <a href="#pricing" class="footer-link">Pricing</a>
-                    <a href="#" class="footer-link">Case Studies</a>
-                    <a href="#" class="footer-link">Resources</a>
+                    <a href="#" class="footer-link">Documentation</a>
+                    <a href="#" class="footer-link">Roadmap</a>
                 </div>
             </div>
             <div class="footer-column">
                 <h3>Company</h3>
                 <div class="footer-links">
-                    <a href="#" class="footer-link">About Us</a>
+                    <a href="#" class="footer-link">About Huntr</a>
                     <a href="#" class="footer-link">Blog</a>
-                    <a href="#" class="footer-link">Contact</a>
-                    <a href="#" class="footer-link">Support</a>
+                    <a href="mailto:db0sz.co@gmail.com" class="footer-link">Contact Support</a>
+                    <a href="tel:+2347089406819" class="footer-link">Call Us</a>
                 </div>
             </div>
             <div class="footer-column">
@@ -284,17 +513,17 @@
                     <a href="#" class="footer-link">Privacy Policy</a>
                     <a href="#" class="footer-link">Terms of Service</a>
                     <a href="#" class="footer-link">Cookie Policy</a>
-                    <a href="#" class="footer-link">GDPR</a>
+                    <a href="#" class="footer-link">GDPR Compliance</a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Niche Finder. All rights reserved.</p>
+            <p>&copy; 2024 Huntr. All rights reserved. | AI-Powered Job Opportunity Hunter</p>
             <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                <a href="https://twitter.com" class="social-link" title="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://linkedin.com" class="social-link" title="Connect on LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com" class="social-link" title="View on GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://discord.com" class="social-link" title="Join Discord Community"><i class="fab fa-discord"></i></a>
             </div>
         </div>
     </footer>

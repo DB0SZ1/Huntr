@@ -4,7 +4,7 @@
  */
 
 // API Base URL
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://huntr-backend.onrender.com';
 
 // Tab switching
 const signupTab = document.getElementById('signupTab');

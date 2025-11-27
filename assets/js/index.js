@@ -66,31 +66,39 @@
         const mobileMenuBtn = document.querySelector('#mobileMenuBtn');
         const mobileMenu = document.querySelector('#mobileMenu');
         const mobileMenuClose = document.querySelector('#mobileMenuClose');
-        const mobileOverlay = document.querySelector('#mobileOverlay');
         const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
         // Open mobile menu
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent closing immediately
             mobileMenu.classList.add('active');
-            mobileOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
 
         // Close mobile menu
         const closeMobileMenu = () => {
             mobileMenu.classList.remove('active');
-            mobileOverlay.classList.remove('active');
             document.body.style.overflow = '';
         };
 
         mobileMenuClose.addEventListener('click', closeMobileMenu);
-        mobileOverlay.addEventListener('click', closeMobileMenu);
 
         // Close menu when clicking a link
         mobileNavLinks.forEach(link => {
             link.addEventListener('click', () => {
                 closeMobileMenu();
             });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            // Check if menu is open
+            if (mobileMenu.classList.contains('active')) {
+                // If click is outside the menu and not on the menu button, close it
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            }
         });
 
         // Add cursor glow effect

@@ -159,16 +159,17 @@ async function loadUserCredits() {
         console.log('💰 Credits API response:', response);
         
         // Extract credits from various possible response formats
+        // API returns: {current_credits: 50, daily_credits: 50, tier: 'pro', ...}
         let credits = 0;
         
         if (window.ResponseParser) {
             credits = window.ResponseParser.extractNumber(
                 response, 
-                ['balance', 'credits', 'remaining', 'available'], 
+                ['current_credits', 'balance', 'credits', 'remaining', 'available'], 
                 0
             );
         } else {
-            credits = response?.balance ?? response?.credits ?? 0;
+            credits = response?.current_credits ?? response?.balance ?? response?.credits ?? 0;
         }
         
         console.log('✅ User credits:', credits);

@@ -16,7 +16,6 @@ let scanPollInterval = null;
 // DOM Elements
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
 const mainContent = document.getElementById('mainContent');
 const upgradeBtn = document.getElementById('upgradeBtn');
 const startScanBtn = document.getElementById('startScanBtn');
@@ -51,16 +50,6 @@ if (menuToggle && sidebar) {
     menuToggle.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
         mainContent.classList.toggle('expanded');
-        sidebarOverlay.classList.toggle('active');
-    });
-}
-
-// Close sidebar when clicking overlay
-if (sidebarOverlay && sidebar) {
-    sidebarOverlay.addEventListener('click', () => {
-        sidebar.classList.add('hidden');
-        mainContent.classList.add('expanded');
-        sidebarOverlay.classList.remove('active');
     });
 }
 
@@ -142,7 +131,15 @@ async function loadRecentActivity() {
         
         activityList.innerHTML = '';
         
-        data.activities.forEach(activity => {
+        // Handle both array response and object with activities property
+        const activities = Array.isArray(data) ? data : (data?.activities || []);
+        
+        if (activities.length === 0) {
+            activityList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">No recent activity</p>';
+            return;
+        }
+        
+        activities.forEach(activity => {
             const item = createActivityItem(activity);
             activityList.appendChild(item);
         });
@@ -407,31 +404,27 @@ function updateUpgradeButton(tier) {
 
 // Setup Event Listeners
 function setupEventListeners() {
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('visible');
-        sidebar.classList.toggle('hidden');
-        sidebarOverlay.classList.toggle('active');
-    });
-
-    // Close sidebar when clicking outside (on the overlay/background)
-    sidebarOverlay.addEventListener('click', () => {
-        sidebar.classList.remove('visible');
-        sidebar.classList.add('hidden');
-        sidebarOverlay.classList.remove('active');
-    });
-    
-    // Also close sidebar when clicking nav items
-    // OLD CODE DISABLED - Navigation now handled by pages.core.js via event delegation
-    // The new system uses data-page attributes and event delegation
-    /*
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', () => {
-            sidebar.classList.add('hidden');
-            sidebar.classList.remove('visible');
-            sidebarOverlay.classList.remove('active');
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('visible');
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('expanded');
         });
-    });
-    */
+    }
+
+    // Close sidebar when clicking outside
+    if (sidebar && menuToggle) {
+        document.addEventListener('click', (e) => {
+            if (sidebar?.classList.contains('visible')) {
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar?.classList.remove('visible');
+                    sidebar?.classList.add('hidden');
+                    mainContent?.classList.add('expanded');
+                }
+            }
+        });
+    }
 
     startScanBtn.addEventListener('click', startScanning);
     stopScanBtn.addEventListener('click', stopScanning);
@@ -489,7 +482,8 @@ async function loadCreditsDisplay() {
         const creditsValue = document.getElementById('creditsValue');
         if (creditsValue) {
             // Extract current_credits from API response
-            const credits = creditsResponse?.current_credits || creditsResponse?.balance || creditsResponse?.data?.current_credits || creditsResponse?.data?.balance || 0;
+            // API returns: {current_credits: 50, daily_credits: 50, tier: 'pro', ...}
+            const credits = creditsResponse?.current_credits || creditsResponse?.balance || creditsResponse?.credits || creditsResponse?.data?.current_credits || creditsResponse?.data?.balance || 0;
             creditsValue.textContent = credits.toString();
         }
     } catch (error) {

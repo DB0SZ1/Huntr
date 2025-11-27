@@ -3,7 +3,7 @@
  * Centralized API communication with authentication
  */
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://huntr-backend.onrender.com';
 
 // Cache Manager with TTL (Time-To-Live)
 const CacheManager = {

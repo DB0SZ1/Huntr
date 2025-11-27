@@ -1280,7 +1280,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s;
-            z-index: 999;
+            z-index: 998;
         }
 
         .mobile-overlay.active {

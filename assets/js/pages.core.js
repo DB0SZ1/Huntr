@@ -246,6 +246,10 @@ function navigateToPage(pageName) {
             functionName = 'renderPromotionsPage';
             scriptFile = 'assets/js/pages/promotions.page.js';
             break;
+        case 'complaints':
+            functionName = 'renderComplaintsPage';
+            scriptFile = 'assets/js/pages.js';
+            break;
         default:
             console.error(`Unknown page: ${pageName}`);
             showToast(`Unknown page: ${pageName}`, 'error');

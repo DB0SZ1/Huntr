@@ -209,7 +209,7 @@
                 'history': 'assets/js/pages/history.page.js',
                 'settings': 'assets/js/pages/settings.page.js',
                 'promotions': 'assets/js/pages/promotions.page.js',
-                'complaints': 'assets/js/pages.js'
+                'complaints': 'assets/js/pages/complaints.page.js'
             };
             
             const scriptFile = scriptMap[pageName];

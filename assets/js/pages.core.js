@@ -248,7 +248,7 @@ function navigateToPage(pageName) {
             break;
         case 'complaints':
             functionName = 'renderComplaintsPage';
-            scriptFile = 'assets/js/pages.js';
+            scriptFile = 'assets/js/pages/complaints.page.js';
             break;
         default:
             console.error(`Unknown page: ${pageName}`);

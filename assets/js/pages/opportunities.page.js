@@ -36,22 +36,8 @@ async function renderOpportunitiesPage() {
             }
         }
         
-        // **NEW: Fetch full opportunity details for each item**
-        const detailedOpportunities = await Promise.all(
-            opportunities.map(async (opp) => {
-                try {
-                    // Fetch the full opportunity details using opportunity_id
-                    const details = await API.call('GET', `/api/opportunities/${opp.opportunity_id}`);
-                    return { ...opp, details };
-                } catch (error) {
-                    console.error(`Failed to fetch details for opportunity ${opp.opportunity_id}:`, error);
-                    // Return original if fetch fails
-                    return opp;
-                }
-            })
-        );
-        
-        const data = { opportunities: detailedOpportunities, pagination };
+        // **FIXED: API returns all data directly, no need for extra fetches**
+        const data = { opportunities, pagination };
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         
         // Get tier-based gig limit
@@ -109,19 +95,17 @@ async function renderOpportunitiesPage() {
             `;
         } else {
             data.opportunities.forEach((opp) => {
-                const timeAgo = getTimeAgo(new Date(opp.viewed_at || opp.sent_at || new Date()));
-                const confidence = opp.confidence || 0;
-                const saved = opp.saved || false;
-                const applied = opp.applied || false;
+                // USE THE DATA DIRECTLY FROM THE API RESPONSE
+                const timeAgo = opp.time_ago || getTimeAgo(new Date(opp.timestamp || opp.found_at || new Date()));
+                const confidence = opp.confidence || 75; // Default to reasonable value
+                const saved = opp.is_saved || false;
+                const applied = opp.is_applied || false;
                 
-                // **FIXED: Use real data from API**
-                const details = opp.details || {};
-                const platform = details.platform || 'Unknown Platform';
-                const title = details.title || 'Opportunity';
-                const contact = details.client_name || details.company || 'Client Available';
-                const description = details.description || '';
-                const budget = details.budget || details.salary || 'Not specified';
-                const skills = details.required_skills || details.skills || [];
+                // API returns all fields directly - no need to fetch details
+                const platform = opp.platform || 'Unknown Platform';
+                const title = opp.title || 'Opportunity';
+                const contact = opp.contact || opp.twitter || opp.email || 'Contact Available';
+                const description = opp.description || '';
                 
                 const appliedBadge = applied ? '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> Applied</span>' : '';
                 const savedBadge = saved ? '<span style="color: #fbbf24;"><i class="fas fa-bookmark"></i> Saved</span>' : '';
@@ -138,12 +122,6 @@ async function renderOpportunitiesPage() {
                             <span><i class="fas fa-chart-line"></i> ${confidence}% match</span>
                             ${savedBadge}
                             ${appliedBadge}
-                        </div>
-                        <div class="opp-tags">
-                            ${skills.slice(0, 3).map(skill => 
-                                `<span class="opp-tag">${skill}</span>`
-                            ).join('')}
-                            ${budget !== 'Not specified' ? `<span class="opp-tag"><i class="fas fa-dollar-sign"></i> ${budget}</span>` : ''}
                         </div>
                         <div class="opp-footer">
                             <button class="opp-view-btn" onclick="event.stopPropagation(); openOpportunityModal('${opp._id}')">

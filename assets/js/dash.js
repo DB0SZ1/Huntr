@@ -12,6 +12,7 @@ if (!requireAuth()) {
 let currentUser = null;
 let activeScanId = null;
 let scanPollInterval = null;
+let creditsPollInterval = null;
 
 // DOM Elements
 const menuToggle = document.getElementById('menuToggle');
@@ -341,6 +342,9 @@ async function pollScanStatus() {
             document.getElementById('totalOpportunities').textContent = status.opportunities_found;
             document.getElementById('scanTime').textContent = status.duration_seconds + 's';
             
+            // Update real-time balance after scan completes
+            await updateRealtimeBalance();
+            
             await loadDashboardStats();
             await loadRecentActivity();
         } else if (status.status === 'error') {
@@ -486,10 +490,83 @@ async function loadCreditsDisplay() {
             const credits = creditsResponse?.current_credits || creditsResponse?.balance || creditsResponse?.credits || creditsResponse?.data?.current_credits || creditsResponse?.data?.balance || 0;
             creditsValue.textContent = credits.toString();
         }
+        
+        // Start real-time balance polling
+        startRealtimeBalancePolling();
+        
     } catch (error) {
         console.error('Failed to load credits:', error);
         const creditsValue = document.getElementById('creditsValue');
         if (creditsValue) creditsValue.textContent = 'Error';
+    }
+}
+
+// Real-time Balance Update Functions
+async function updateRealtimeBalance() {
+    try {
+        const token = TokenManager.getAccessToken();
+        const response = await fetch('/api/credits/balance/realtime', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch realtime balance');
+        
+        const balance = await response.json();
+        
+        // Update UI with new balance
+        const creditsValue = document.getElementById('creditsValue');
+        if (creditsValue) {
+            const credits = balance?.current_credits || balance?.balance || balance?.credits || 0;
+            creditsValue.textContent = credits.toString();
+        }
+        
+        // Update any other balance displays on the page
+        updateUI(balance);
+        
+    } catch (error) {
+        console.error('Failed to update realtime balance:', error);
+    }
+}
+
+// Update UI with balance information
+function updateUI(balance) {
+    const creditsValue = document.getElementById('creditsValue');
+    if (creditsValue) {
+        const credits = balance?.current_credits || balance?.balance || balance?.credits || 0;
+        creditsValue.textContent = credits.toString();
+    }
+    
+    // Update daily credits display if it exists
+    const dailyCreditsElement = document.querySelector('[data-credits="daily"]');
+    if (dailyCreditsElement && balance?.daily_credits_remaining) {
+        dailyCreditsElement.textContent = balance.daily_credits_remaining;
+    }
+    
+    // Update used today if it exists
+    const usedTodayElement = document.querySelector('[data-credits="used-today"]');
+    if (usedTodayElement && balance?.credits_used_today) {
+        usedTodayElement.textContent = balance.credits_used_today;
+    }
+}
+
+// Start polling for real-time balance updates every 3 minutes
+function startRealtimeBalancePolling() {
+    // Clear existing interval if any
+    if (creditsPollInterval) {
+        clearInterval(creditsPollInterval);
+    }
+    
+    // Poll every 3 minutes
+    creditsPollInterval = setInterval(async () => {
+        await updateRealtimeBalance();
+    }, 3 * 60 * 1000);
+}
+
+// Stop polling for real-time balance updates
+function stopRealtimeBalancePolling() {
+    if (creditsPollInterval) {
+        clearInterval(creditsPollInterval);
+        creditsPollInterval = null;
     }
 }
 
@@ -611,9 +688,16 @@ window.addEventListener('beforeunload', () => {
     if (scanPollInterval) {
         clearInterval(scanPollInterval);
     }
+    if (creditsPollInterval) {
+        clearInterval(creditsPollInterval);
+    }
 });
 
 // Export functions
 window.closeNoNichesModal = closeNoNichesModal;
 window.showCreditsInfo = showCreditsInfo;
 window.goToNichesPage = goToNichesPage;
+window.updateRealtimeBalance = updateRealtimeBalance;
+window.startRealtimeBalancePolling = startRealtimeBalancePolling;
+window.stopRealtimeBalancePolling = stopRealtimeBalancePolling;
+window.updateUI = updateUI;

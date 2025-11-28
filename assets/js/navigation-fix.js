@@ -149,7 +149,8 @@
             'niches': 'renderNichesPage',
             'history': 'renderHistoryPage',
             'settings': 'renderSettingsPage',
-            'promotions': 'renderPromotionsPage'
+            'promotions': 'renderPromotionsPage',
+            'complaints': 'renderComplaintsPage'
         };
         
         const functionName = pageMap[pageName];
@@ -207,7 +208,8 @@
                 'niches': 'assets/js/pages/niches.page.js',
                 'history': 'assets/js/pages/history.page.js',
                 'settings': 'assets/js/pages/settings.page.js',
-                'promotions': 'assets/js/pages/promotions.page.js'
+                'promotions': 'assets/js/pages/promotions.page.js',
+                'complaints': 'assets/js/pages.js'
             };
             
             const scriptFile = scriptMap[pageName];

@@ -287,6 +287,102 @@ function goToNichesPage() {
     }
 }
 
+// Show Insufficient Credits Modal
+function showInsufficientCreditsModal(error) {
+    // Remove existing modal if any
+    const existingModal = document.getElementById('insufficientCreditsModal');
+    if (existingModal) existingModal.remove();
+    
+    // Extract error data with safe fallbacks
+    const creditsNeeded = error.credits_needed || 5;
+    const creditsAvailable = error.credits_available || 0;
+    const creditsPerDay = error.credits_per_day || 50;
+    const nextRefillHours = error.next_refill_in_hours || 0;
+    
+    // Format refill time
+    let refillTimeText = '';
+    if (nextRefillHours > 0) {
+        if (nextRefillHours >= 24) {
+            const days = Math.ceil(nextRefillHours / 24);
+            refillTimeText = `${days} day${days > 1 ? 's' : ''}`;
+        } else {
+            refillTimeText = `${Math.round(nextRefillHours)} hour${nextRefillHours > 1 ? 's' : ''}`;
+        }
+    }
+    
+    const modal = document.createElement('div');
+    modal.id = 'insufficientCreditsModal';
+    modal.className = 'modal-overlay';
+    modal.style.display = 'flex';
+    modal.style.zIndex = '11000';
+    
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 500px; text-align: center;">
+            <div style="font-size: 64px; margin-bottom: 24px;">💳</div>
+            <h2 class="modal-title">Insufficient Credits</h2>
+            <p class="modal-subtitle" style="margin-bottom: 32px;">
+                You don't have enough credits to start this scan.
+            </p>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: left;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Credits Needed</p>
+                        <p style="font-size: 20px; font-weight: bold; color: #ff6b6b;">${creditsNeeded}</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Credits Available</p>
+                        <p style="font-size: 20px; font-weight: bold; color: rgba(255, 255, 255, 0.8);">${creditsAvailable}</p>
+                    </div>
+                </div>
+                
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px;">
+                    <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-bottom: 8px;">Daily Limit</p>
+                    <p style="font-size: 14px; color: rgba(255, 255, 255, 0.9);">${creditsPerDay} credits/day</p>
+                    ${refillTimeText ? `<p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 8px;">Next refill in <strong>${refillTimeText}</strong></p>` : ''}
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button onclick="closeInsufficientCreditsModal()" class="btn-secondary" style="flex: 1; max-width: 150px;">
+                    Cancel
+                </button>
+                <button onclick="goToUpgradePage()" class="btn-primary" style="flex: 1; max-width: 200px;">
+                    <i class="fas fa-star"></i> Upgrade Now
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeInsufficientCreditsModal();
+        }
+    });
+}
+
+// Close Insufficient Credits Modal
+function closeInsufficientCreditsModal() {
+    const modal = document.getElementById('insufficientCreditsModal');
+    if (modal) modal.remove();
+}
+
+// Go to Upgrade Page
+function goToUpgradePage() {
+    closeInsufficientCreditsModal();
+    // Navigate to settings or upgrade page
+    if (window.navigateToPage) {
+        window.navigateToPage('settings');
+    } else {
+        // Fallback: manually navigate or open settings
+        const settingsNavItem = document.querySelectorAll('.nav-item')[6];
+        if (settingsNavItem) settingsNavItem.click();
+    }
+}
+
 // Scanner Functionality - FIXED
 async function startScanning() {
     try {
@@ -305,8 +401,12 @@ async function startScanning() {
     } catch (error) {
         console.error('Failed to start scan:', error);
         
+        // Check if error is about insufficient credits
+        if (error.message && error.message.includes('insufficient_credits')) {
+            showInsufficientCreditsModal(error);
+        } 
         // Check if error is about no niches
-        if (error.message && error.message.includes('No active niches')) {
+        else if (error.message && error.message.includes('No active niches')) {
             showNoNichesModal();
         } else {
             handleAPIError(error, 'Failed to start scan');
@@ -710,3 +810,6 @@ window.updateRealtimeBalance = updateRealtimeBalance;
 window.startRealtimeBalancePolling = startRealtimeBalancePolling;
 window.stopRealtimeBalancePolling = stopRealtimeBalancePolling;
 window.updateUI = updateUI;
+window.showInsufficientCreditsModal = showInsufficientCreditsModal;
+window.closeInsufficientCreditsModal = closeInsufficientCreditsModal;
+window.goToUpgradePage = goToUpgradePage;

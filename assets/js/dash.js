@@ -402,7 +402,8 @@ async function startScanning() {
         console.error('Failed to start scan:', error);
         
         // Check if error is about insufficient credits
-        if (error.message && error.message.includes('insufficient_credits')) {
+        if (error.error === 'insufficient_credits' || error.message.includes('insufficient_credits')) {
+            console.log('Showing insufficient credits modal with error:', error);
             showInsufficientCreditsModal(error);
         } 
         // Check if error is about no niches

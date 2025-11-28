@@ -177,7 +177,11 @@ async function authenticatedFetch(endpoint, options = {}) {
                 message: data.message,
                 fullResponse: data
             });
-            throw new Error(data.detail || data.error || data.message || 'Request failed');
+            // Create error with full data attached
+            const error = new Error(data.detail || data.error || data.message || 'Request failed');
+            // Attach all response data to error object
+            Object.assign(error, data);
+            throw error;
         }
         
         return data;

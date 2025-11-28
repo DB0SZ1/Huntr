@@ -325,8 +325,11 @@ async function pollScanStatus() {
         const progressFill = document.getElementById('scanProgressFill');
         const progressPercent = document.getElementById('scanPercentage');
         
-        if (progressFill) progressFill.style.width = status.progress + '%';
-        if (progressPercent) progressPercent.textContent = status.progress + '%';
+        // Handle undefined progress with default value
+        const progress = status.progress !== undefined ? status.progress : 0;
+        
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (progressPercent) progressPercent.textContent = progress + '%';
         
         if (status.current_platform) {
             addScanMessage(`Scanning ${status.current_platform}...`, 'scanning');
@@ -504,27 +507,30 @@ async function loadCreditsDisplay() {
 // Real-time Balance Update Functions
 async function updateRealtimeBalance() {
     try {
-        const token = TokenManager.getAccessToken();
-        const response = await fetch('/api/credits/balance/realtime', {
-            headers: { 'Authorization': `Bearer ${token}` }
+        console.log('[RealTime Balance] Fetching from API endpoint');
+        
+        const balance = await API.getRealtimeBalance();
+        
+        console.log('[RealTime Balance] Response received:', {
+            current_credits: balance?.current_credits,
+            balance: balance?.balance,
+            credits: balance?.credits,
+            daily_credits_remaining: balance?.daily_credits_remaining
         });
-        
-        if (!response.ok) throw new Error('Failed to fetch realtime balance');
-        
-        const balance = await response.json();
         
         // Update UI with new balance
         const creditsValue = document.getElementById('creditsValue');
         if (creditsValue) {
             const credits = balance?.current_credits || balance?.balance || balance?.credits || 0;
             creditsValue.textContent = credits.toString();
+            console.log('[RealTime Balance] UI updated with:', credits);
         }
         
         // Update any other balance displays on the page
         updateUI(balance);
         
     } catch (error) {
-        console.error('Failed to update realtime balance:', error);
+        console.error('[RealTime Balance] Failed to update:', error);
     }
 }
 
@@ -554,10 +560,13 @@ function startRealtimeBalancePolling() {
     // Clear existing interval if any
     if (creditsPollInterval) {
         clearInterval(creditsPollInterval);
+        console.log('[RealTime Balance] Cleared existing polling interval');
     }
     
     // Poll every 3 minutes
+    console.log('[RealTime Balance] Starting polling every 3 minutes (180000ms)');
     creditsPollInterval = setInterval(async () => {
+        console.log('[RealTime Balance] Polling interval triggered');
         await updateRealtimeBalance();
     }, 3 * 60 * 1000);
 }

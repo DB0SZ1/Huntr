@@ -519,6 +519,13 @@ const API = {
         return await authenticatedFetch('/api/credits/balance');
     },
     
+    async getRealtimeBalance() {
+        return await authenticatedFetch('/api/credits/balance/realtime', {
+            method: 'GET',
+            cache: 'no-store' // Prevent caching for realtime data
+        });
+    },
+    
     async checkCredits(action) {
         return await authenticatedFetch('/api/credits/check/' + action, {
             method: 'POST'

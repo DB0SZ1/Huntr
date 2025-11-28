@@ -26,11 +26,11 @@ async function openOpportunityModal(opportunityId) {
                     <div class="opp-modal-meta">
                         <div class="opp-modal-meta-item">
                             <i class="fas fa-chart-line"></i>
-                            <span>${opportunity.match_data?.confidence || 0}% match</span>
+                            <span>${opportunity.confidence || opportunity.match_data?.confidence || opportunity.ai_analysis?.confidence || 75}% match</span>
                         </div>
                         <div class="opp-modal-meta-item">
                             <i class="fas fa-clock"></i>
-                            <span>${getTimeAgo(new Date(opportunity.created_at))}</span>
+                            <span>${getTimeAgo(new Date(opportunity.timestamp || opportunity.found_at || opportunity.created_at || new Date()))}</span>
                         </div>
                     </div>
 

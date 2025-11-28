@@ -136,6 +136,12 @@ async function handleCVUpload(event) {
         
         // Extract analysis data
         const analysis = data?.analysis || data?.lite_analysis || data;
+        const premiumAnalysis = data?.premium_analysis || {};
+        const tier_level = data?.tier_level;
+        
+        console.log('Full response data:', data);
+        console.log('Analysis type:', tier_level);
+        console.log('Premium analysis available:', premiumAnalysis);
         
         // Display results
         let resultsHTML = `
@@ -176,30 +182,25 @@ async function handleCVUpload(event) {
             `;
         }
         
-        if (user.tier === 'premium' && data.premium_analysis) {
-            if (data.premium_analysis.ats_score !== undefined) {
+        // Premium Analysis Section
+        if (tier_level === 'premium' && Object.keys(premiumAnalysis).length > 0) {
+            if (premiumAnalysis.ats_score !== undefined) {
                 resultsHTML += `
                     <div style="background: rgba(168, 85, 247, 0.15); padding: 16px; border-radius: 8px;">
                         <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">ATS Score</h5>
-                        <div style="font-size: 24px; font-weight: 700; color: #a855f7;">${data.premium_analysis.ats_score}%</div>
+                        <div style="font-size: 24px; font-weight: 700; color: #a855f7;">${premiumAnalysis.ats_score}%</div>
                     </div>
                 `;
             }
             
-            if (data.premium_analysis.salary_range) {
+            if (premiumAnalysis.salary_range) {
+                const salary = typeof premiumAnalysis.salary_range === 'string' 
+                    ? premiumAnalysis.salary_range 
+                    : premiumAnalysis.salary_range.nigeria || 'See details';
                 resultsHTML += `
                     <div style="background: rgba(249, 115, 22, 0.15); padding: 16px; border-radius: 8px;">
                         <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Salary Range</h5>
-                        <div style="color: #f97316; font-weight: 600;">${data.premium_analysis.salary_range}</div>
-                    </div>
-                `;
-            }
-            
-            if (data.premium_analysis.career_trajectory) {
-                resultsHTML += `
-                    <div style="background: rgba(34, 197, 94, 0.15); padding: 16px; border-radius: 8px; grid-column: span 2;">
-                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Career Trajectory</h5>
-                        <div style="color: rgba(255, 255, 255, 0.8);">${data.premium_analysis.career_trajectory}</div>
+                        <div style="color: #f97316; font-weight: 600; font-size: 13px;">${salary}</div>
                     </div>
                 `;
             }
@@ -207,10 +208,30 @@ async function handleCVUpload(event) {
         
         resultsHTML += '</div>';
         
+        if (analysis.strengths && analysis.strengths.length > 0) {
+            resultsHTML += `
+                <div style="margin-top: 16px;">
+                    <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                        <i class="fas fa-star" style="color: #fbbf24; margin-right: 6px;"></i>Strengths
+                    </h5>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 14px;">
+                        ${analysis.strengths.map(strength => `
+                            <li style="padding: 6px 0;">
+                                <i class="fas fa-check" style="color: #10b981; margin-right: 8px;"></i>
+                                ${strength}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
         if (analysis.improvements && analysis.improvements.length > 0) {
             resultsHTML += `
                 <div style="margin-top: 16px;">
-                    <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Improvement Areas</h5>
+                    <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                        <i class="fas fa-wrench" style="color: #f97316; margin-right: 6px;"></i>Improvement Areas
+                    </h5>
                     <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 14px;">
                         ${analysis.improvements.map(imp => `
                             <li style="padding: 6px 0;">
@@ -223,20 +244,98 @@ async function handleCVUpload(event) {
             `;
         }
         
-        if (analysis.recommendations && analysis.recommendations.length > 0) {
-            resultsHTML += `
-                <div style="margin-top: 16px;">
-                    <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">Recommendations</h5>
-                    <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 14px;">
-                        ${analysis.recommendations.map(rec => `
-                            <li style="padding: 6px 0;">
-                                <i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 8px;"></i>
-                                ${rec}
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-            `;
+        // Premium-only sections
+        if (tier_level === 'premium') {
+            if (premiumAnalysis.missing_keywords && premiumAnalysis.missing_keywords.length > 0) {
+                resultsHTML += `
+                    <div style="margin-top: 16px;">
+                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-search" style="color: #3b82f6; margin-right: 6px;"></i>Missing Keywords
+                        </h5>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            ${premiumAnalysis.missing_keywords.slice(0, 15).map(keyword => `
+                                <span style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; 
+                                    padding: 4px 10px; border-radius: 16px; font-size: 12px;">
+                                    ${keyword}
+                                </span>
+                            `).join('')}
+                            ${premiumAnalysis.missing_keywords.length > 15 ? `
+                                <span style="background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5); 
+                                    padding: 4px 10px; border-radius: 16px; font-size: 12px;">
+                                    +${premiumAnalysis.missing_keywords.length - 15} more
+                                </span>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (premiumAnalysis.best_titles && premiumAnalysis.best_titles.length > 0) {
+                resultsHTML += `
+                    <div style="margin-top: 16px;">
+                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-briefcase" style="color: #a855f7; margin-right: 6px;"></i>Recommended Job Titles
+                        </h5>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 14px;">
+                            ${premiumAnalysis.best_titles.map(title => `
+                                <li style="padding: 6px 0;">
+                                    <i class="fas fa-check-circle" style="color: #a855f7; margin-right: 8px;"></i>
+                                    ${title}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (premiumAnalysis.target_companies && premiumAnalysis.target_companies.length > 0) {
+                resultsHTML += `
+                    <div style="margin-top: 16px;">
+                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-building" style="color: #06b6d4; margin-right: 6px;"></i>Recommended Companies
+                        </h5>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 14px;">
+                            ${premiumAnalysis.target_companies.map(company => `
+                                <li style="padding: 6px 0;">
+                                    <i class="fas fa-arrow-right" style="color: #06b6d4; margin-right: 8px;"></i>
+                                    ${company}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (premiumAnalysis.career_gaps && premiumAnalysis.career_gaps.length > 0) {
+                resultsHTML += `
+                    <div style="margin-top: 16px;">
+                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-calendar-times" style="color: #f97316; margin-right: 6px;"></i>Career Gaps
+                        </h5>
+                        <ul style="list-style: none; padding: 0; margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 13px;">
+                            ${premiumAnalysis.career_gaps.map(gap => `
+                                <li style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px;">
+                                    <strong>${gap.gap_period}</strong> - ${gap.duration}
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 4px;">${gap.note}</div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (premiumAnalysis.career_advice) {
+                resultsHTML += `
+                    <div style="margin-top: 16px; background: rgba(34, 197, 94, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-lightbulb" style="color: #10b981; margin-right: 6px;"></i>Career Advice
+                        </h5>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 0;">
+                            ${premiumAnalysis.career_advice}
+                        </p>
+                    </div>
+                `;
+            }
         }
         
         document.getElementById('analysisResults').style.display = 'block';

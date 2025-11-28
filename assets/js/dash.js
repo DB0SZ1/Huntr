@@ -289,6 +289,8 @@ function goToNichesPage() {
 
 // Show Insufficient Credits Modal
 function showInsufficientCreditsModal(error) {
+    console.log('🔴 showInsufficientCreditsModal called with error:', error);
+    
     // Remove existing modal if any
     const existingModal = document.getElementById('insufficientCreditsModal');
     if (existingModal) existingModal.remove();
@@ -298,6 +300,8 @@ function showInsufficientCreditsModal(error) {
     const creditsAvailable = error.credits_available || 0;
     const creditsPerDay = error.credits_per_day || 50;
     const nextRefillHours = error.next_refill_in_hours || 0;
+    
+    console.log('📊 Extracted credits data:', { creditsNeeded, creditsAvailable, creditsPerDay, nextRefillHours });
     
     // Format refill time
     let refillTimeText = '';
@@ -355,6 +359,8 @@ function showInsufficientCreditsModal(error) {
     `;
     
     document.body.appendChild(modal);
+    console.log('✅ Modal appended to DOM:', modal);
+    console.log('🎨 Modal display style:', modal.style.display);
     
     // Close on overlay click
     modal.addEventListener('click', (e) => {
@@ -400,16 +406,21 @@ async function startScanning() {
         
     } catch (error) {
         console.error('Failed to start scan:', error);
+        console.log('Error object:', error);
+        console.log('error.error:', error.error);
+        console.log('error.message:', error.message);
         
         // Check if error is about insufficient credits
-        if (error.error === 'insufficient_credits' || error.message.includes('insufficient_credits')) {
-            console.log('Showing insufficient credits modal with error:', error);
+        if (error.error === 'insufficient_credits' || (error.message && error.message.includes('insufficient_credits'))) {
+            console.log('🔴 CAUGHT: Insufficient credits error - showing modal');
             showInsufficientCreditsModal(error);
         } 
         // Check if error is about no niches
         else if (error.message && error.message.includes('No active niches')) {
+            console.log('🔴 CAUGHT: No niches error - showing modal');
             showNoNichesModal();
         } else {
+            console.log('🔴 CAUGHT: Generic error - handling');
             handleAPIError(error, 'Failed to start scan');
         }
         

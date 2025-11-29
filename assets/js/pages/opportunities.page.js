@@ -1,5 +1,5 @@
 /**
- * opportunities.page.js - Opportunities page rendering (FIXED)
+ * opportunities.page.js - Opportunities page rendering (FIXED WITH NEW CARD STYLES)
  */
 
 async function renderOpportunitiesPage() {
@@ -36,7 +36,6 @@ async function renderOpportunitiesPage() {
             }
         }
         
-        // **FIXED: API returns all data directly, no need for extra fetches**
         const data = { opportunities, pagination };
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         
@@ -49,19 +48,19 @@ async function renderOpportunitiesPage() {
         const gigLimit = tierLimits[user.tier] || 6;
         
         let html = `
-            <div class="page-header" style="margin-bottom: clamp(24px, 5vw, 40px);">
-                <h2 class="page-title" style="font-size: clamp(22px, 5vw, 32px); font-weight: 700;">Opportunities (${data.pagination.total})</h2>
-                <div class="breadcrumb" style="font-size: clamp(11px, 2.5vw, 13px); color: rgba(255, 255, 255, 0.5);">Home / Opportunities</div>
+            <div class="page-header" style="margin-bottom: 32px;">
+                <h2 class="page-title" style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Opportunities (${data.pagination.total})</h2>
+                <div class="breadcrumb" style="font-size: 13px; color: rgba(255, 255, 255, 0.5); margin-bottom: 20px;">Home / Opportunities</div>
                 
-                <div style="display: flex; gap: clamp(8px, 2vw, 12px); margin-top: clamp(12px, 3vw, 16px); flex-wrap: wrap;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                     <button class="toggle-btn active" onclick="switchOpportunitiesView('regular')" style="
-                        padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
-                        border-radius: 8px;
+                        padding: 10px 20px;
+                        border-radius: 10px;
                         border: 1px solid rgba(255, 255, 255, 0.2);
                         background: rgba(255, 255, 255, 0.1);
                         color: rgba(255, 255, 255, 0.9);
                         cursor: pointer;
-                        font-size: clamp(12px, 3vw, 14px);
+                        font-size: 14px;
                         font-weight: 600;
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                         white-space: nowrap;
@@ -69,13 +68,13 @@ async function renderOpportunitiesPage() {
                         <i class="fas fa-list"></i> Regular
                     </button>
                     <button class="toggle-btn" onclick="switchOpportunitiesView('curated')" style="
-                        padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
-                        border-radius: 8px;
+                        padding: 10px 20px;
+                        border-radius: 10px;
                         border: 1px solid rgba(255, 255, 255, 0.2);
                         background: rgba(255, 255, 255, 0.05);
                         color: rgba(255, 255, 255, 0.6);
                         cursor: pointer;
-                        font-size: clamp(12px, 3vw, 14px);
+                        font-size: 14px;
                         font-weight: 600;
                         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                         white-space: nowrap;
@@ -85,7 +84,7 @@ async function renderOpportunitiesPage() {
                 </div>
             </div>
 
-            <div class="opportunities-grid" id="regularOppView" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(12px, 3vw, 20px); padding: clamp(8px, 2vw, 16px);">
+            <div class="opportunities-grid" id="regularOppView" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
         `;
         
         if (data.opportunities.length === 0) {
@@ -99,70 +98,158 @@ async function renderOpportunitiesPage() {
             `;
         } else {
             data.opportunities.forEach((opp) => {
-                // USE THE DATA DIRECTLY FROM THE API RESPONSE
                 const timeAgo = opp.time_ago || getTimeAgo(new Date(opp.timestamp || opp.found_at || new Date()));
-                const confidence = opp.confidence || 75; // Default to reasonable value
+                const confidence = opp.confidence || 75;
                 const saved = opp.is_saved || false;
                 const applied = opp.is_applied || false;
                 
-                // API returns all fields directly - no need to fetch details
                 const platform = opp.platform || 'Unknown Platform';
                 const title = opp.title || 'Opportunity';
                 const contact = opp.contact || opp.twitter || opp.email || 'Contact Available';
-                const description = opp.description || '';
-                
-                const appliedBadge = applied ? '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> Applied</span>' : '';
-                const savedBadge = saved ? '<span style="color: #fbbf24;"><i class="fas fa-bookmark"></i> Saved</span>' : '';
                 
                 html += `
-                    <div class="opportunity-card glass-card" onclick="openOpportunityModal('${opp._id}')" style="display: flex; flex-direction: column; padding: clamp(16px, 4vw, 24px); gap: clamp(8px, 2vw, 12px); cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
-                        <div class="opp-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                            <div class="opp-platform" style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(59, 130, 246, 0.2); padding: 4px 8px; border-radius: 6px; color: #60a5fa; font-weight: 600; white-space: nowrap;">${platform}</div>
-                            <div class="opp-time" style="font-size: clamp(11px, 2.5vw, 12px); color: rgba(255, 255, 255, 0.5); white-space: nowrap;">${timeAgo}</div>
+                    <div class="opportunity-card glass-card" onclick="openOpportunityModal('${opp._id}')" style="
+                        display: flex;
+                        flex-direction: column;
+                        padding: 20px;
+                        gap: 12px;
+                        cursor: pointer;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        overflow: hidden;
+                        position: relative;
+                        min-height: 280px;
+                    ">
+                        <!-- Top gradient line on hover -->
+                        <div style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 3px;
+                            background: linear-gradient(90deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5));
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        " class="card-top-line"></div>
+                        
+                        <div class="opp-header" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <div class="opp-platform" style="
+                                font-size: 10px;
+                                font-weight: 700;
+                                padding: 5px 10px;
+                                background: rgba(59, 130, 246, 0.15);
+                                border: 1px solid rgba(59, 130, 246, 0.3);
+                                border-radius: 6px;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                color: #60a5fa;
+                                white-space: nowrap;
+                            ">${platform}</div>
+                            <div class="opp-time" style="font-size: 11px; color: rgba(255, 255, 255, 0.5); white-space: nowrap; font-weight: 500;">${timeAgo}</div>
                         </div>
-                        <h3 class="opp-title" style="font-size: clamp(14px, 3.5vw, 18px); font-weight: 700; color: white; margin: 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${title}</h3>
-                        <div class="opp-company" style="font-size: clamp(12px, 3vw, 14px); color: rgba(255, 255, 255, 0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${contact}</div>
-                        <div class="opp-details" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto;">
-                            <span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 4px 8px; border-radius: 4px; white-space: nowrap;"><i class="fas fa-chart-line"></i> ${confidence}%</span>
-                            ${savedBadge ? `<span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(251, 191, 36, 0.15); color: #fbbf24; padding: 4px 8px; border-radius: 4px; white-space: nowrap;">${savedBadge}</span>` : ''}
-                            ${appliedBadge ? `<span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 8px; border-radius: 4px; white-space: nowrap;">${appliedBadge}</span>` : ''}
+                        
+                        <h3 class="opp-title" style="
+                            font-size: 16px;
+                            font-weight: 700;
+                            color: white;
+                            margin: 8px 0;
+                            line-height: 1.4;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                            min-height: 44px;
+                            font-family: 'Poppins', sans-serif;
+                        ">${title}</h3>
+                        
+                        <div class="opp-company" style="
+                            font-size: 13px;
+                            color: rgba(255, 255, 255, 0.7);
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            font-weight: 500;
+                            margin-bottom: 12px;
+                        ">${contact}</div>
+                        
+                        <div class="opp-details" style="display: flex; gap: 8px; flex-wrap: wrap; margin: auto 0 12px 0;">
+                            <span style="
+                                font-size: 11px;
+                                background: rgba(34, 197, 94, 0.15);
+                                color: #22c55e;
+                                padding: 5px 10px;
+                                border-radius: 6px;
+                                white-space: nowrap;
+                                font-weight: 600;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                            "><i class="fas fa-chart-line" style="font-size: 10px;"></i> ${confidence}%</span>
+                            ${saved ? `<span style="
+                                font-size: 11px;
+                                background: rgba(251, 191, 36, 0.15);
+                                color: #fbbf24;
+                                padding: 5px 10px;
+                                border-radius: 6px;
+                                white-space: nowrap;
+                                font-weight: 600;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                            "><i class="fas fa-bookmark" style="font-size: 10px;"></i> Saved</span>` : ''}
+                            ${applied ? `<span style="
+                                font-size: 11px;
+                                background: rgba(16, 185, 129, 0.15);
+                                color: #10b981;
+                                padding: 5px 10px;
+                                border-radius: 6px;
+                                white-space: nowrap;
+                                font-weight: 600;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                            "><i class="fas fa-check-circle" style="font-size: 10px;"></i> Applied</span>` : ''}
                         </div>
-                        <div class="opp-footer" style="display: flex; gap: clamp(6px, 2vw, 8px); margin-top: 8px; flex-wrap: wrap;">
+                        
+                        <div class="opp-footer" style="
+                            display: flex;
+                            gap: 8px;
+                            margin-top: auto;
+                            padding-top: 12px;
+                            border-top: 1px solid rgba(255, 255, 255, 0.08);
+                        ">
                             <button class="opp-view-btn" onclick="event.stopPropagation(); openOpportunityModal('${opp._id}')" style="
                                 flex: 1;
+                                padding: 10px 16px;
                                 background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
                                 border: 1px solid rgba(59, 130, 246, 0.3);
+                                border-radius: 10px;
                                 color: #60a5fa;
-                                padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px);
-                                border-radius: 8px;
-                                cursor: pointer;
-                                transition: all 0.3s;
-                                font-size: clamp(11px, 2.5vw, 13px);
+                                font-size: 13px;
                                 font-weight: 600;
-                                white-space: nowrap;
-                                min-height: 32px;
+                                cursor: pointer;
+                                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
                                 gap: 6px;
-                            ">
-                                View <i class="fas fa-arrow-right"></i>
+                                font-family: 'Poppins', sans-serif;
+                            " onmouseover="this.style.background='linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.2))'; this.style.borderColor='rgba(59, 130, 246, 0.5)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.background='linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1))'; this.style.borderColor='rgba(59, 130, 246, 0.3)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                View <i class="fas fa-arrow-right" style="font-size: 11px;"></i>
                             </button>
                             <button class="opp-save-btn" onclick="event.stopPropagation(); saveOpportunity('${opp._id}')" style="
-                                background: ${saved ? 'rgba(251, 191, 36, 0.2)' : 'rgba(255, 255, 255, 0.1)'};
-                                border: 1px solid ${saved ? 'rgba(251, 191, 36, 0.3)' : 'rgba(255, 255, 255, 0.2)'};
-                                color: ${saved ? '#fbbf24' : 'rgba(255, 255, 255, 0.6)'};
-                                padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
-                                border-radius: 8px;
+                                padding: 10px 12px;
+                                background: ${saved ? 'rgba(251, 191, 36, 0.2)' : 'rgba(255, 255, 255, 0.06)'};
+                                border: 1px solid ${saved ? 'rgba(251, 191, 36, 0.4)' : 'rgba(255, 255, 255, 0.15)'};
+                                border-radius: 10px;
+                                color: ${saved ? '#fbbf24' : 'rgba(255, 255, 255, 0.7)'};
+                                font-size: 14px;
                                 cursor: pointer;
                                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                                font-size: clamp(11px, 2.5vw, 13px);
-                                font-weight: 600;
-                                min-height: 32px;
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
-                            ">
+                                min-width: 40px;
+                            " onmouseover="if (!${saved}) { this.style.background='rgba(251, 191, 36, 0.15)'; this.style.borderColor='rgba(251, 191, 36, 0.3)'; this.style.color='#fbbf24'; } this.style.transform='translateY(-2px)'" onmouseout="if (!${saved}) { this.style.background='rgba(255, 255, 255, 0.06)'; this.style.borderColor='rgba(255, 255, 255, 0.15)'; this.style.color='rgba(255, 255, 255, 0.7)'; } this.style.transform='translateY(0)'">
                                 <i class="fas fa-bookmark"></i>
                             </button>
                         </div>
@@ -173,7 +260,7 @@ async function renderOpportunitiesPage() {
         
         html += '</div>';
         html += `
-            <div class="opportunities-grid" id="curatedOppView" style="display: none; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(12px, 3vw, 20px); padding: clamp(8px, 2vw, 16px);">
+            <div class="opportunities-grid" id="curatedOppView" style="display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
                 <div class="loading-container">
                     <div class="spinner"></div>
                     <p>Loading curated gigs...</p>
@@ -182,6 +269,17 @@ async function renderOpportunitiesPage() {
         `;
         
         mainContent.innerHTML = html;
+        
+        // Add hover effect for top line
+        document.querySelectorAll('.opportunity-card').forEach(card => {
+            const topLine = card.querySelector('.card-top-line');
+            card.addEventListener('mouseenter', () => {
+                if (topLine) topLine.style.opacity = '1';
+            });
+            card.addEventListener('mouseleave', () => {
+                if (topLine) topLine.style.opacity = '0';
+            });
+        });
         
     } catch (error) {
         console.error('Failed to load opportunities:', error);
@@ -197,7 +295,6 @@ async function renderOpportunitiesPage() {
     }
 }
 
-// Keep other functions unchanged...
 async function switchOpportunitiesView(viewType) {
     const regularView = document.getElementById('regularOppView');
     const curatedView = document.getElementById('curatedOppView');
@@ -253,8 +350,8 @@ async function loadCuratedGigsInOpportunities() {
             html = `
                 <div class="empty-state">
                     <i class="fas fa-star" style="font-size: 64px; opacity: 0.3; margin-bottom: 16px;"></i>
-                    <h3 style="font-size: clamp(18px, 4vw, 22px);">No curated gigs this week</h3>
-                    <p style="font-size: clamp(12px, 3vw, 15px);">Check back later for top opportunities</p>
+                    <h3 style="font-size: 22px;">No curated gigs this week</h3>
+                    <p style="font-size: 15px;">Check back later for top opportunities</p>
                 </div>
             `;
         } else {
@@ -270,59 +367,59 @@ async function loadCuratedGigsInOpportunities() {
                 const scamColor = scamRisk < 20 ? '#10b981' : scamRisk < 50 ? '#f59e0b' : '#f87171';
                 
                 html += `
-                    <div class="opportunity-card glass-card" style="display: flex; flex-direction: column; padding: clamp(16px, 4vw, 24px); gap: clamp(8px, 2vw, 12px); cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;">
-                        <div class="opp-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                            <div class="opp-platform" style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(251, 191, 36, 0.2); padding: 4px 8px; border-radius: 6px; color: #fbbf24; font-weight: 600; white-space: nowrap;">#${index + 1}</div>
-                            <div class="opp-time" style="font-size: clamp(11px, 2.5vw, 12px); color: #fbbf24; white-space: nowrap;">
+                    <div class="opportunity-card glass-card" style="display: flex; flex-direction: column; padding: 20px; gap: 12px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; min-height: 280px; position: relative;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, rgba(251, 191, 36, 0.6), rgba(245, 158, 11, 0.6)); opacity: 0; transition: opacity 0.3s ease;" class="card-top-line"></div>
+                        
+                        <div class="opp-header" style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                            <div class="opp-platform" style="font-size: 10px; font-weight: 700; background: rgba(251, 191, 36, 0.2); padding: 5px 10px; border-radius: 6px; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); white-space: nowrap;">#${index + 1}</div>
+                            <div class="opp-time" style="font-size: 11px; color: #fbbf24; white-space: nowrap;">
                                 <i class="fas fa-star"></i> Featured
                             </div>
                         </div>
-                        <h3 class="opp-title" style="font-size: clamp(14px, 3.5vw, 18px); font-weight: 700; color: white; margin: 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${title}</h3>
-                        <div class="opp-company" style="font-size: clamp(12px, 3vw, 14px); color: rgba(255, 255, 255, 0.7);">${niche}</div>
-                        <div class="opp-details" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(${matchScore > 80 ? '22, 197, 94' : matchScore > 60 ? '245, 158, 11' : '248, 113, 113'}, 0.15); padding: 4px 8px; border-radius: 4px; color: ${matchScore > 80 ? '#22c55e' : matchScore > 60 ? '#f59e0b' : '#f87171'}; white-space: nowrap;">
+                        <h3 class="opp-title" style="font-size: 16px; font-weight: 700; color: white; margin: 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: 'Poppins', sans-serif; min-height: 44px;">${title}</h3>
+                        <div class="opp-company" style="font-size: 13px; color: rgba(255, 255, 255, 0.7); font-weight: 500;">${niche}</div>
+                        <div class="opp-details" style="display: flex; gap: 8px; flex-wrap: wrap; margin: auto 0 12px 0;">
+                            <span style="font-size: 11px; background: rgba(${matchScore > 80 ? '22, 197, 94' : matchScore > 60 ? '245, 158, 11' : '248, 113, 113'}, 0.15); padding: 5px 10px; border-radius: 6px; color: ${matchScore > 80 ? '#22c55e' : matchScore > 60 ? '#f59e0b' : '#f87171'}; white-space: nowrap; font-weight: 600;">
                                 <i class="fas fa-chart-line"></i> ${matchScore}%
                             </span>
-                            <span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(${scamRisk < 20 ? '16, 185, 129' : scamRisk < 50 ? '245, 158, 11' : '248, 113, 113'}, 0.15); padding: 4px 8px; border-radius: 4px; color: ${scamColor}; white-space: nowrap;">
+                            <span style="font-size: 11px; background: rgba(${scamRisk < 20 ? '16, 185, 129' : scamRisk < 50 ? '245, 158, 11' : '248, 113, 113'}, 0.15); padding: 5px 10px; border-radius: 6px; color: ${scamColor}; white-space: nowrap; font-weight: 600;">
                                 <i class="fas fa-shield"></i> ${scamRisk}%
                             </span>
-                            ${urgency ? `<span style="font-size: clamp(11px, 2.5vw, 12px); background: rgba(248, 113, 113, 0.15); padding: 4px 8px; border-radius: 4px; color: #f87171; white-space: nowrap;"><i class="fas fa-bolt"></i> ${urgency}</span>` : ''}
+                            ${urgency ? `<span style="font-size: 11px; background: rgba(248, 113, 113, 0.15); padding: 5px 10px; border-radius: 6px; color: #f87171; white-space: nowrap; font-weight: 600;"><i class="fas fa-bolt"></i> ${urgency}</span>` : ''}
                         </div>
                         <div class="opp-tags" style="margin-top: auto;">
-                            <span class="opp-tag" style="font-size: clamp(11px, 2.5vw, 13px); background: rgba(100, 116, 139, 0.2); color: rgba(255, 255, 255, 0.7); padding: 4px 8px; border-radius: 4px; display: inline-block;">${salary}</span>
+                            <span class="opp-tag" style="font-size: 11px; background: rgba(100, 116, 139, 0.2); color: rgba(255, 255, 255, 0.7); padding: 5px 10px; border-radius: 6px; display: inline-block;">${salary}</span>
                         </div>
-                        <div class="opp-footer" style="display: flex; gap: clamp(6px, 2vw, 8px); margin-top: 8px; flex-wrap: wrap;">
+                        <div class="opp-footer" style="display: flex; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
                             <button class="opp-view-btn" onclick="event.stopPropagation(); window.open('${externalUrl}', '_blank')" style="
                                 flex: 1;
+                                padding: 10px 16px;
                                 background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
                                 border: 1px solid rgba(59, 130, 246, 0.3);
+                                border-radius: 10px;
                                 color: #60a5fa;
-                                padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 16px);
-                                border-radius: 8px;
-                                cursor: pointer;
-                                transition: all 0.3s;
-                                font-size: clamp(11px, 2.5vw, 13px);
+                                font-size: 13px;
                                 font-weight: 600;
-                                white-space: nowrap;
-                                min-height: 32px;
+                                cursor: pointer;
+                                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
                                 gap: 6px;
+                                font-family: 'Poppins', sans-serif;
                             ">
                                 View <i class="fas fa-external-link-alt"></i>
                             </button>
                             <button class="opp-save-btn" onclick="event.stopPropagation(); saveCuratedGig('${gig._id || gig.id || index}')" style="
-                                background: rgba(255, 255, 255, 0.1);
-                                border: 1px solid rgba(255, 255, 255, 0.2);
-                                color: rgba(255, 255, 255, 0.6);
-                                padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
-                                border-radius: 8px;
+                                padding: 10px 12px;
+                                background: rgba(255, 255, 255, 0.06);
+                                border: 1px solid rgba(255, 255, 255, 0.15);
+                                border-radius: 10px;
+                                color: rgba(255, 255, 255, 0.7);
+                                font-size: 14px;
                                 cursor: pointer;
                                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                                font-size: clamp(11px, 2.5vw, 13px);
-                                font-weight: 600;
-                                min-height: 32px;
+                                min-width: 40px;
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
@@ -336,12 +433,17 @@ async function loadCuratedGigsInOpportunities() {
         }
         
         curatedView.innerHTML = html;
-        if (curatedView.style.display !== 'none') {
-            curatedView.style.display = 'grid';
-            curatedView.style.gridTemplateColumns = 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))';
-            curatedView.style.gap = 'clamp(12px, 3vw, 20px)';
-            curatedView.style.padding = 'clamp(8px, 2vw, 16px)';
-        }
+        
+        // Add hover effect for curated cards
+        document.querySelectorAll('#curatedOppView .opportunity-card').forEach(card => {
+            const topLine = card.querySelector('.card-top-line');
+            card.addEventListener('mouseenter', () => {
+                if (topLine) topLine.style.opacity = '1';
+            });
+            card.addEventListener('mouseleave', () => {
+                if (topLine) topLine.style.opacity = '0';
+            });
+        });
         
     } catch (error) {
         console.error('Failed to load curated gigs in opportunities:', error);

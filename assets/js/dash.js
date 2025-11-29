@@ -389,17 +389,68 @@ function goToUpgradePage() {
     }
 }
 
+// Global scan tracking
+let scanStartTime = null;
+let scanDurationInterval = null;
+
+// Mock platform names for fake logs
+const mockPlatforms = [
+    'Twitter/X', 'LinkedIn', 'Reddit', 'Telegram', 'Discord',
+    'Facebook Groups', 'Slack Communities', 'GitHub Issues',
+    'Medium', 'Dev.to', 'Hashnode', 'Freelancer', 'Upwork'
+];
+
 // Scanner Functionality - FIXED
 async function startScanning() {
     try {
+        // Reset scan tracking
+        scanStartTime = null;
+        
         // Start scan
         const response = await API.startScan();
         activeScanId = response.scan_id;
+        
+        // Record scan start time
+        scanStartTime = Date.now();
         
         // Show scanning UI
         scannerIdle.style.display = 'none';
         scannerActive.style.display = 'block';
         scanLog.innerHTML = '';
+        
+        // Add initial log
+        addScanMessage('🚀 Scan started - initializing platforms...', 'info');
+        
+        // Add mock logs while waiting for first response
+        let mockLogIndex = 0;
+        const mockLogInterval = setInterval(() => {
+            if (!activeScanId) {
+                clearInterval(mockLogInterval);
+                return;
+            }
+            
+            const platform = mockPlatforms[mockLogIndex % mockPlatforms.length];
+            addScanMessage(`📡 Connecting to ${platform}...`, 'scanning');
+            mockLogIndex++;
+            
+            // Stop mock logs after 5 attempts or if we get real data
+            if (mockLogIndex > 5) {
+                clearInterval(mockLogInterval);
+            }
+        }, 1500);
+        
+        // Start time update display
+        scanDurationInterval = setInterval(() => {
+            if (scanStartTime) {
+                const elapsed = Math.floor((Date.now() - scanStartTime) / 1000);
+                const timeDisplay = document.getElementById('scanTimeDisplay');
+                if (timeDisplay) {
+                    const mins = Math.floor(elapsed / 60);
+                    const secs = elapsed % 60;
+                    timeDisplay.textContent = `${mins}m ${secs}s`;
+                }
+            }
+        }, 1000);
         
         // Start polling for status
         scanPollInterval = setInterval(() => pollScanStatus(), 2000);
@@ -444,18 +495,25 @@ async function pollScanStatus() {
         if (progressPercent) progressPercent.textContent = progress + '%';
         
         if (status.current_platform) {
-            addScanMessage(`Scanning ${status.current_platform}...`, 'scanning');
+            addScanMessage(`📡 Scanning ${status.current_platform}...`, 'scanning');
         }
         
         if (status.status === 'completed') {
             clearInterval(scanPollInterval);
             scanPollInterval = null;
+            if (scanDurationInterval) {
+                clearInterval(scanDurationInterval);
+                scanDurationInterval = null;
+            }
+            
+            // Calculate actual scan duration
+            const scanDuration = scanStartTime ? Math.floor((Date.now() - scanStartTime) / 1000) : status.duration_seconds;
             
             addScanMessage(`✅ Scan completed! Found ${status.opportunities_found} opportunities`, 'success');
             
             document.getElementById('scanSummary').style.display = 'flex';
             document.getElementById('totalOpportunities').textContent = status.opportunities_found;
-            document.getElementById('scanTime').textContent = status.duration_seconds + 's';
+            document.getElementById('scanTime').textContent = scanDuration + 's';
             
             // Update real-time balance after scan completes
             await updateRealtimeBalance();
@@ -465,6 +523,10 @@ async function pollScanStatus() {
         } else if (status.status === 'error') {
             clearInterval(scanPollInterval);
             scanPollInterval = null;
+            if (scanDurationInterval) {
+                clearInterval(scanDurationInterval);
+                scanDurationInterval = null;
+            }
             addScanMessage('❌ Scan failed: ' + status.error, 'error');
         }
         
@@ -479,8 +541,13 @@ function stopScanning() {
         clearInterval(scanPollInterval);
         scanPollInterval = null;
     }
+    if (scanDurationInterval) {
+        clearInterval(scanDurationInterval);
+        scanDurationInterval = null;
+    }
     
     activeScanId = null;
+    scanStartTime = null;
     scannerActive.style.display = 'none';
     scannerIdle.style.display = 'block';
 }

@@ -525,52 +525,6 @@ function contactSales() {
     showToast('Redirecting to contact page...', 'info');
     window.location.href = 'https://chat.whatsapp.com/JKMq6e8oMAuJ9CZzpTqlSo?mode=hqrt1';
 }
-</script>
-            });
-        }
-        
-        allPlans.forEach(plan => {
-            const isCurrentPlan = plan.tier === user.tier;
-            
-            const card = document.createElement('div');
-            card.className = 'pricing-modal-card' + (plan.tier === 'pro' ? ' featured' : '');
-            // Store the full plan ID (use id, _id, or tier as fallback)
-            card.dataset.planId = plan.id || plan._id || plan.tier;
-            
-            // Defensive price handling: price, price_ngn, or 0
-            const price = plan.price ?? plan.price_ngn ?? 0;
-            const priceDisplay = price === 0 ? 'Free' : `₦${Number(price).toLocaleString()}/mo`;
-            const badge = isCurrentPlan ? 'Current Plan' : (plan.tier === 'pro' ? 'Most Popular' : '');
-            
-            card.innerHTML = `
-                ${badge ? `<span class="pricing-modal-badge">${badge}</span>` : ''}
-                <h3 class="pricing-modal-name">${plan.tier.charAt(0).toUpperCase() + plan.tier.slice(1)}</h3>
-                <div class="pricing-modal-price">${priceDisplay}</div>
-                <ul class="pricing-modal-features">
-                    <li><i class="fas fa-check"></i> ${plan.max_niches} niches</li>
-                    <li><i class="fas fa-check"></i> ${plan.max_keywords_per_niche} keywords/niche</li>
-                    <li><i class="fas fa-check"></i> ${plan.platforms.length} platforms</li>
-                    <li><i class="fas fa-check"></i> ${plan.monthly_opportunities_limit === -1 ? 'Unlimited' : plan.monthly_opportunities_limit} opps/month</li>
-                    ${plan.features ? plan.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('') : ''}
-                </ul>
-                <button class="pricing-modal-btn" 
-                        ${isCurrentPlan ? 'disabled' : ''}
-                        onclick="handleUpgradeClick(this)">
-                    ${isCurrentPlan ? 'Current Plan' : `Upgrade to ${plan.tier.toUpperCase()}`}
-                </button>
-            `;
-            
-            modalContent.appendChild(card);
-        });
-    } catch (error) {
-        console.error('Failed to load pricing:', error);
-        document.querySelector('.pricing-modal-grid').innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                <p>Failed to load pricing plans. Please try again.</p>
-            </div>
-        `;
-    }
-}
 
 async function handleUpgradeClick(button) {
     // Get plan ID from the card's data attribute
@@ -621,39 +575,7 @@ async function upgradeToPlan(tier, planId, button) {
     }
 }
 
-// Attach event listeners for upgrade buttons
-document.addEventListener('DOMContentLoaded', () => {
-    // Get all upgrade buttons by selecting them properly
-    const upgradeButtons = document.querySelectorAll('.pricing-modal-btn');
-    
-    upgradeButtons.forEach(button => {
-        // Skip disabled buttons (current plan)
-        if (!button.disabled) {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Get tier and planId from the parent card
-                const card = this.closest('.pricing-modal-card');
-                const tierName = card.querySelector('.pricing-modal-name').textContent.toLowerCase();
-                const planId = card.dataset.planId || tierName;
-                
-                console.log('Upgrade clicked - Tier:', tierName, 'PlanId:', planId);
-                
-                upgradeToPlan(tierName, planId, this);
-            });
-        }
-    });
-});
-
-// Call this when modal opens
-if (document.getElementById('upgradeBtn')) {
-    document.getElementById('upgradeBtn').addEventListener('click', () => {
-        loadUpgradeModal();
-        document.getElementById('upgradeModal').classList.add('active');
-    });
-}
-
-// Follow Modal
+// Follow Modal Functions
 async function initFollowModal() {
     try {
         const status = await API.checkFollowStatus();
@@ -691,10 +613,10 @@ function showFollowModal() {
                 </div>
                 
                 <div class="follow-modal-actions">
-                    <button id="dismissFollowBtn" class="follow-btn-dismiss" onclick="dismissFollowModal()">
+                    <button id="dismissFollowBtn" class="follow-btn-dismiss">
                         Not now
                     </button>
-                    <button id="followBtn" class="follow-btn-primary" onclick="openXFollow()">
+                    <button id="followBtn" class="follow-btn-primary">
                         <i class="fab fa-x-twitter"></i>
                         Follow @db0sz1
                     </button>
@@ -704,6 +626,10 @@ function showFollowModal() {
     `;
     
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Attach event listeners after modal is created
+    document.getElementById('dismissFollowBtn').addEventListener('click', dismissFollowModal);
+    document.getElementById('followBtn').addEventListener('click', openXFollow);
     
     // Prevent closing by clicking outside
     document.getElementById('followModal').addEventListener('click', function(e) {
@@ -760,112 +686,141 @@ async function dismissFollowModal() {
         console.error('Failed to dismiss modal:', error);
     }
 }
-</script>
-    <script src="assets/js/dash.js"></script>
-    
-    <!-- Initialize Follow Modal on Load -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check follow status after auth is ready
-            setTimeout(initFollowModal, 500);
-            
-            // Load total scans count
-            loadTotalScans();
-            
-            // Check if user is admin and show admin link
-            checkAdminStatus();
-        });
-        
-        /**
-         * Check if user is admin and show admin nav link if true
-         */
-        async function checkAdminStatus() {
-            try {
-                // First check if admin status is stored in localStorage (from login)
-                const storedAdminStatus = localStorage.getItem('is_admin');
-                console.log('Stored admin status from localStorage:', storedAdminStatus);
-                
-                let isAdmin = storedAdminStatus === 'true';
-                
-                // If not in localStorage, try to fetch from API
-                if (!isAdmin) {
-                    const response = await API.getCurrentUser();
-                    console.log('Admin status check - API response:', response);
-                    
-                    // Check both is_admin and admin fields (API might use either)
-                    isAdmin = response && (response.is_admin === true || response.admin === true);
-                }
-                
-                console.log('Is user admin?', isAdmin);
-                
-                if (isAdmin) {
-                    // Show admin nav link
-                    const adminLink = document.getElementById('adminNavLink');
-                    if (adminLink) {
-                        adminLink.style.display = 'flex';
-                        // Store admin status for later use
-                        localStorage.setItem('is_admin', 'true');
-                        console.log('✅ Admin link shown');
-                    } else {
-                        console.warn('Admin link element not found');
-                    }
-                } else {
-                    // Hide admin link and clear admin status
-                    const adminLink = document.getElementById('adminNavLink');
-                    if (adminLink) {
-                        adminLink.style.display = 'none';
-                    }
-                    localStorage.removeItem('is_admin');
-                    console.log('Admin link hidden - user not admin');
-                }
-            } catch (error) {
-                console.error('Failed to check admin status:', error);
-                // Hide admin link on error
-                const adminLink = document.getElementById('adminNavLink');
-                if (adminLink) {
-                    adminLink.style.display = 'none';
-                }
-            }
-        }
-        
-        async function loadTotalScans() {
-            try {
-                const result = await API.getDashboardStats();
-                let totalScans = 0;
-                
-                // Extract monthly_scans from dashboard stats API response
-                if (result && result.monthly_scans !== undefined) {
-                    totalScans = result.monthly_scans;
-                } else if (result && result.total) {
-                    totalScans = result.total;
-                } else if (result && Array.isArray(result.scans)) {
-                    totalScans = result.scans.length;
-                } else if (Array.isArray(result)) {
-                    totalScans = result.length;
-                }
-                
-                // Update the stats card
-                const statsValue = document.getElementById('totalScansValue');
-                const statsDesc = document.getElementById('totalScansDesc');
-                
-                if (statsValue) {
-                    statsValue.textContent = totalScans;
-                }
-                if (statsDesc) {
-                    statsDesc.textContent = totalScans === 1 ? 'Scan in this account' : 'Scans in this account';
-                }
-            } catch (error) {
-                console.error('Failed to load total scans:', error);
-                // Keep default 0 if error
-                const statsValue = document.getElementById('totalScansValue');
-                if (statsValue) {
-                    statsValue.textContent = '0';
-                }
-            }
-        }
-    </script>
 
-    <!-- Toast Container -->
-    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 12px; max-width: 400px;"></div>
+// DOMContentLoaded event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Attach event listeners for upgrade buttons
+    const upgradeButtons = document.querySelectorAll('.pricing-modal-btn');
+    
+    upgradeButtons.forEach(button => {
+        // Skip disabled buttons (current plan)
+        if (!button.disabled) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get tier and planId from the parent card
+                const card = this.closest('.pricing-modal-card');
+                const tierName = card.querySelector('.pricing-modal-name').textContent.toLowerCase();
+                const planId = card.dataset.planId || tierName;
+                
+                console.log('Upgrade clicked - Tier:', tierName, 'PlanId:', planId);
+                
+                upgradeToPlan(tierName, planId, this);
+            });
+        }
+    });
+    
+    // Setup upgrade button modal trigger
+    const upgradeBtn = document.getElementById('upgradeBtn');
+    if (upgradeBtn) {
+        upgradeBtn.addEventListener('click', () => {
+            loadUpgradeModal();
+            document.getElementById('upgradeModal').classList.add('active');
+        });
+    }
+    
+    // Check follow status after auth is ready
+    setTimeout(initFollowModal, 500);
+    
+    // Load total scans count
+    loadTotalScans();
+    
+    // Check if user is admin and show admin link
+    checkAdminStatus();
+});
+
+/**
+ * Check if user is admin and show admin nav link if true
+ */
+async function checkAdminStatus() {
+    try {
+        // First check if admin status is stored in localStorage (from login)
+        const storedAdminStatus = localStorage.getItem('is_admin');
+        console.log('Stored admin status from localStorage:', storedAdminStatus);
+        
+        let isAdmin = storedAdminStatus === 'true';
+        
+        // If not in localStorage, try to fetch from API
+        if (!isAdmin) {
+            const response = await API.getCurrentUser();
+            console.log('Admin status check - API response:', response);
+            
+            // Check both is_admin and admin fields (API might use either)
+            isAdmin = response && (response.is_admin === true || response.admin === true);
+        }
+        
+        console.log('Is user admin?', isAdmin);
+        
+        if (isAdmin) {
+            // Show admin nav link
+            const adminLink = document.getElementById('adminNavLink');
+            if (adminLink) {
+                adminLink.style.display = 'flex';
+                // Store admin status for later use
+                localStorage.setItem('is_admin', 'true');
+                console.log('✅ Admin link shown');
+            } else {
+                console.warn('Admin link element not found');
+            }
+        } else {
+            // Hide admin link and clear admin status
+            const adminLink = document.getElementById('adminNavLink');
+            if (adminLink) {
+                adminLink.style.display = 'none';
+            }
+            localStorage.removeItem('is_admin');
+            console.log('Admin link hidden - user not admin');
+        }
+    } catch (error) {
+        console.error('Failed to check admin status:', error);
+        // Hide admin link on error
+        const adminLink = document.getElementById('adminNavLink');
+        if (adminLink) {
+            adminLink.style.display = 'none';
+        }
+    }
+}
+
+async function loadTotalScans() {
+    try {
+        const result = await API.getDashboardStats();
+        let totalScans = 0;
+        
+        // Extract monthly_scans from dashboard stats API response
+        if (result && result.monthly_scans !== undefined) {
+            totalScans = result.monthly_scans;
+        } else if (result && result.total) {
+            totalScans = result.total;
+        } else if (result && Array.isArray(result.scans)) {
+            totalScans = result.scans.length;
+        } else if (Array.isArray(result)) {
+            totalScans = result.length;
+        }
+        
+        // Update the stats card
+        const statsValue = document.getElementById('totalScansValue');
+        const statsDesc = document.getElementById('totalScansDesc');
+        
+        if (statsValue) {
+            statsValue.textContent = totalScans;
+        }
+        if (statsDesc) {
+            statsDesc.textContent = totalScans === 1 ? 'Scan in this account' : 'Scans in this account';
+        }
+    } catch (error) {
+        console.error('Failed to load total scans:', error);
+        // Keep default 0 if error
+        const statsValue = document.getElementById('totalScansValue');
+        if (statsValue) {
+            statsValue.textContent = '0';
+        }
+    }
+}
+</script>
+
+<script src="assets/js/dash.js"></script>
+
+<!-- Toast Container -->
+<div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 12px; max-width: 400px;"></div>
 </body>
 </html>

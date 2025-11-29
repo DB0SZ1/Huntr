@@ -247,11 +247,11 @@ function showNoNichesModal() {
                 You need to create at least one niche before starting a scan. 
                 Niches help us find opportunities that match your interests and skills.
             </p>
-            <div style="display: flex; gap: 12px; justify-content: center;">
-                <button onclick="closeNoNichesModal()" class="btn-secondary" style="flex: 1; max-width: 150px;">
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="closeNoNichesModal()" class="btn-secondary">
                     Cancel
                 </button>
-                <button onclick="goToNichesPage()" class="btn-primary" style="flex: 1; max-width: 200px;">
+                <button onclick="goToNichesPage()" class="btn-primary">
                     <i class="fas fa-plus"></i> Create Niche
                 </button>
             </div>

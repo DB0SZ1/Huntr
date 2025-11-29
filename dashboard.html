@@ -370,160 +370,130 @@
 
     <!-- Upgrade Modal -->
     <div class="modal-overlay" id="upgradeModal">
-        <div class="modal-content" style="max-width: 100%; width: 90%; max-height: 90vh; overflow-y: auto; border-radius: 20px;">
-            <button class="modal-close" id="modalClose" style="top: 16px; right: 16px; z-index: 10;">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
                 <i class="fas fa-times"></i>
             </button>
 
-            <div style="padding: 24px 20px; text-align: center;">
-                <h2 class="modal-title" style="font-size: clamp(22px, 5vw, 32px); margin-bottom: 8px;">Upgrade Your Plan</h2>
-                <p class="modal-subtitle" style="font-size: clamp(13px, 3.5vw, 15px); margin-bottom: 24px;">Choose the perfect plan for your needs</p>
+            <h2 class="modal-title">Upgrade Your Plan</h2>
+            <p class="modal-subtitle">Choose the perfect plan for your needs</p>
 
-                <!-- 2x2 Grid for Mobile, Responsive -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <!-- Free Plan -->
-                    <div class="pricing-card-compact" style="
-                        background: linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%);
-                        border: 1px solid rgba(107, 114, 128, 0.2);
-                        border-radius: 16px;
-                        padding: 20px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        position: relative;
-                        overflow: hidden;
-                    " onclick="this.style.transform='scale(1.02)'; setTimeout(() => this.style.transform='scale(1)', 200);">
-                        <div style="font-size: 24px; margin-bottom: 12px;">🎯</div>
-                        <h3 style="color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px 0;">Free</h3>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px;">Current Plan</div>
-                        <div style="color: #10b981; font-size: 18px; font-weight: 800; margin-bottom: 16px;">$0<span style="font-size: 12px;">/mo</span></div>
-                        <button style="width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: rgba(255, 255, 255, 0.5); cursor: not-allowed; font-size: 12px; font-weight: 600; opacity: 0.6;">Active</button>
-                    </div>
-
-                    <!-- Pro Plan -->
-                    <div class="pricing-card-compact" style="
-                        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-                        border: 2px solid rgba(59, 130, 246, 0.4);
-                        border-radius: 16px;
-                        padding: 20px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        position: relative;
-                        animation: pulse-card 2s ease-in-out infinite;
-                        transform: scale(1.05);
-                    " onclick="this.style.animation='none'; setTimeout(() => this.style.animation='pulse-card 2s ease-in-out infinite', 500);">
-                        <div style="position: absolute; top: 8px; right: 8px; background: #3b82f6; color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700;">⭐ Popular</div>
-                        <div style="font-size: 28px; margin-bottom: 12px; margin-top: 4px;">👑</div>
-                        <h3 style="color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px 0;">Pro</h3>
-                        <div style="color: #3b82f6; font-size: 12px; margin-bottom: 12px;">Most Popular</div>
-                        <div style="color: #3b82f6; font-size: 20px; font-weight: 800; margin-bottom: 16px;">$29<span style="font-size: 12px;">/mo</span></div>
-                        <button onclick="upgradeUser('pro')" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Upgrade Now</button>
-                    </div>
-
-                    <!-- Ultra Plan -->
-                    <div class="pricing-card-compact" style="
-                        background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%);
-                        border: 1px solid rgba(168, 85, 247, 0.3);
-                        border-radius: 16px;
-                        padding: 20px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        position: relative;
-                    " onclick="this.style.transform='scale(1.02)'; setTimeout(() => this.style.transform='scale(1)', 200);">
-                        <div style="font-size: 28px; margin-bottom: 12px;">🚀</div>
-                        <h3 style="color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px 0;">Ultra</h3>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px;">Maximum Power</div>
-                        <div style="color: #a855f7; font-size: 20px; font-weight: 800; margin-bottom: 16px;">$79<span style="font-size: 12px;">/mo</span></div>
-                        <button onclick="upgradeUser('ultra')" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(168, 85, 247, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Upgrade Now</button>
-                    </div>
-
-                    <!-- Premium Plan -->
-                    <div class="pricing-card-compact" style="
-                        background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
-                        border: 1px solid rgba(249, 115, 22, 0.3);
-                        border-radius: 16px;
-                        padding: 20px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        position: relative;
-                    " onclick="this.style.transform='scale(1.02)'; setTimeout(() => this.style.transform='scale(1)', 200);">
-                        <div style="font-size: 28px; margin-bottom: 12px;">💎</div>
-                        <h3 style="color: white; font-size: 16px; font-weight: 700; margin: 0 0 4px 0;">Premium</h3>
-                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px;">Enterprise</div>
-                        <div style="color: #f97316; font-size: 20px; font-weight: 800; margin-bottom: 16px;">Custom<span style="font-size: 12px;">/mo</span></div>
-                        <button onclick="contactSales()" style="width: 100%; padding: 10px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(249, 115, 22, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">Contact Us</button>
-                    </div>
+            <div class="pricing-modal-grid">
+                <!-- Free Plan -->
+                <div class="pricing-modal-card">
+                    <span class="pricing-modal-badge">Current Plan</span>
+                    <h3 class="pricing-modal-name">Free</h3>
+                    <div class="pricing-modal-price">$0<span>/mo</span></div>
+                    <ul class="pricing-modal-features">
+                        <li><i class="fas fa-check"></i> 10 keywords</li>
+                        <li><i class="fas fa-check"></i> Basic platforms</li>
+                        <li><i class="fas fa-check"></i> 50+ opps/week</li>
+                        <li><i class="fas fa-check"></i> WhatsApp alerts</li>
+                    </ul>
+                    <button class="pricing-modal-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Current Plan</button>
                 </div>
 
-                <!-- Expandable Feature List -->
-                <details style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px; text-align: left; cursor: pointer;">
-                    <summary style="color: white; font-weight: 600; display: flex; align-items: center; justify-content: space-between; user-select: none;">
-                        <span>📋 View Feature Comparison</span>
-                        <i class="fas fa-chevron-down" style="font-size: 12px;"></i>
-                    </summary>
-                    <div style="margin-top: 16px; font-size: 13px; color: rgba(255, 255, 255, 0.8);">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: 12px;">
-                            <div><strong>Free</strong><br>✓ 1 niche<br>✓ Basic platforms</div>
-                            <div><strong style="color: #3b82f6;">Pro</strong><br>✓ 5 niches<br>✓ Advanced scraping</div>
-                            <div><strong style="color: #a855f7;">Ultra</strong><br>✓ Unlimited niches<br>✓ All platforms</div>
-                            <div><strong style="color: #f97316;">Premium</strong><br>✓ Everything<br>✓ 24/7 support</div>
-                        </div>
-                    </div>
-                </details>
+                <!-- Pro Plan -->
+                <div class="pricing-modal-card featured">
+                    <span class="pricing-modal-badge">Most Popular</span>
+                    <h3 class="pricing-modal-name">Pro</h3>
+                    <div class="pricing-modal-price">$29<span>/mo</span></div>
+                    <ul class="pricing-modal-features">
+                        <li><i class="fas fa-check"></i> Everything in Free</li>
+                        <li><i class="fas fa-check"></i> 30+ keywords</li>
+                        <li><i class="fas fa-check"></i> LinkedIn scraper</li>
+                        <li><i class="fas fa-check"></i> DexScreener tokens</li>
+                        <li><i class="fas fa-check"></i> 200+ opps/week</li>
+                        <li><i class="fas fa-check"></i> Advanced AI</li>
+                    </ul>
+                    <button class="pricing-modal-btn">Upgrade to Pro</button>
+                </div>
+
+                <!-- Ultra Plan -->
+                <div class="pricing-modal-card">
+                    <span class="pricing-modal-badge">Maximum Power</span>
+                    <h3 class="pricing-modal-name">Ultra</h3>
+                    <div class="pricing-modal-price">$79<span>/mo</span></div>
+                    <ul class="pricing-modal-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check"></i> Unlimited keywords</li>
+                        <li><i class="fas fa-check"></i> All platforms</li>
+                        <li><i class="fas fa-check"></i> Custom AI prompts</li>
+                        <li><i class="fas fa-check"></i> 500+ opps/week</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <button class="pricing-modal-btn">Upgrade to Ultra</button>
+                </div>
             </div>
         </div>
-
-        <style>
-            @keyframes pulse-card {
-                0%, 100% { transform: scale(1.05); }
-                50% { transform: scale(1.08); }
-            }
-            
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-2px); }
-                75% { transform: translateX(2px); }
-            }
-            
-            @media (max-width: 640px) {
-                .pricing-card-compact {
-                    min-height: 180px;
-                }
-            }
-        </style>
     </div>
 <!-- Add this script in dashboard.html -->
 <script>
 async function loadUpgradeModal() {
     try {
-        // Simplified modal - cards are already in HTML above
-        console.log('Upgrade modal loaded');
-    } catch (error) {
-        console.error('Error loading upgrade modal:', error);
-    }
-}
-
-async function upgradeUser(tier) {
-    showToast(`Upgrading to ${tier}...`, 'info');
-    try {
-        // Call API to upgrade user
-        const response = await API.upgradePlan(tier);
-        if (response.success) {
-            showToast(`Successfully upgraded to ${tier}!`, 'success');
-            document.getElementById('upgradeModal').classList.remove('active');
-            location.reload();
+        const plans = await API.getSubscriptionPlans();
+        const user = await API.getCurrentUser();
+        const modalContent = document.querySelector('.pricing-modal-grid');
+        
+        modalContent.innerHTML = '';
+        
+        // Ensure we have the Free tier (backend may not include it)
+        let allPlans = [...plans];
+        if (!allPlans.find(p => p.tier === 'free')) {
+            allPlans.unshift({
+                tier: 'free',
+                name: 'Free',
+                price: 0,
+                price_ngn: 0,
+                max_niches: 1,
+                max_keywords_per_niche: 5,
+                platforms: ['Twitter/X', 'Reddit'],
+                monthly_opportunities_limit: 50,
+                features: ['Create 1 niche', 'Manual scanning only', 'Up to 50 opportunities/month', 'Email notifications']
+            });
         }
+        
+        allPlans.forEach(plan => {
+            const isCurrentPlan = plan.tier === user.tier;
+            
+            const card = document.createElement('div');
+            card.className = 'pricing-modal-card' + (plan.tier === 'pro' ? ' featured' : '');
+            // Store the full plan ID (use id, _id, or tier as fallback)
+            card.dataset.planId = plan.id || plan._id || plan.tier;
+            
+            // Defensive price handling: price, price_ngn, or 0
+            const price = plan.price ?? plan.price_ngn ?? 0;
+            const priceDisplay = price === 0 ? 'Free' : `₦${Number(price).toLocaleString()}/mo`;
+            const badge = isCurrentPlan ? 'Current Plan' : (plan.tier === 'pro' ? 'Most Popular' : '');
+            
+            card.innerHTML = `
+                ${badge ? `<span class="pricing-modal-badge">${badge}</span>` : ''}
+                <h3 class="pricing-modal-name">${plan.tier.charAt(0).toUpperCase() + plan.tier.slice(1)}</h3>
+                <div class="pricing-modal-price">${priceDisplay}</div>
+                <ul class="pricing-modal-features">
+                    <li><i class="fas fa-check"></i> ${plan.max_niches} niches</li>
+                    <li><i class="fas fa-check"></i> ${plan.max_keywords_per_niche} keywords/niche</li>
+                    <li><i class="fas fa-check"></i> ${plan.platforms.length} platforms</li>
+                    <li><i class="fas fa-check"></i> ${plan.monthly_opportunities_limit === -1 ? 'Unlimited' : plan.monthly_opportunities_limit} opps/month</li>
+                    ${plan.features ? plan.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('') : ''}
+                </ul>
+                <button class="pricing-modal-btn" 
+                        ${isCurrentPlan ? 'disabled' : ''}
+                        onclick="handleUpgradeClick(this)">
+                    ${isCurrentPlan ? 'Current Plan' : `Upgrade to ${plan.tier.toUpperCase()}`}
+                </button>
+            `;
+            
+            modalContent.appendChild(card);
+        });
     } catch (error) {
-        showToast(`Upgrade failed: ${error.message}`, 'error');
+        console.error('Failed to load pricing:', error);
+        document.querySelector('.pricing-modal-grid').innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                <p>Failed to load pricing plans. Please try again.</p>
+            </div>
+        `;
     }
-}
-
-function contactSales() {
-    showToast('Redirecting to contact page...', 'info');
-    window.location.href = 'https://chat.whatsapp.com/JKMq6e8oMAuJ9CZzpTqlSo?mode=hqrt1';
 }
 
 async function handleUpgradeClick(button) {
@@ -575,7 +545,39 @@ async function upgradeToPlan(tier, planId, button) {
     }
 }
 
-// Follow Modal Functions
+// Attach event listeners for upgrade buttons
+document.addEventListener('DOMContentLoaded', () => {
+    // Get all upgrade buttons by selecting them properly
+    const upgradeButtons = document.querySelectorAll('.pricing-modal-btn');
+    
+    upgradeButtons.forEach(button => {
+        // Skip disabled buttons (current plan)
+        if (!button.disabled) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Get tier and planId from the parent card
+                const card = this.closest('.pricing-modal-card');
+                const tierName = card.querySelector('.pricing-modal-name').textContent.toLowerCase();
+                const planId = card.dataset.planId || tierName;
+                
+                console.log('Upgrade clicked - Tier:', tierName, 'PlanId:', planId);
+                
+                upgradeToPlan(tierName, planId, this);
+            });
+        }
+    });
+});
+
+// Call this when modal opens
+if (document.getElementById('upgradeBtn')) {
+    document.getElementById('upgradeBtn').addEventListener('click', () => {
+        loadUpgradeModal();
+        document.getElementById('upgradeModal').classList.add('active');
+    });
+}
+
+// Follow Modal
 async function initFollowModal() {
     try {
         const status = await API.checkFollowStatus();
@@ -613,10 +615,10 @@ function showFollowModal() {
                 </div>
                 
                 <div class="follow-modal-actions">
-                    <button id="dismissFollowBtn" class="follow-btn-dismiss">
+                    <button id="dismissFollowBtn" class="follow-btn-dismiss" onclick="dismissFollowModal()">
                         Not now
                     </button>
-                    <button id="followBtn" class="follow-btn-primary">
+                    <button id="followBtn" class="follow-btn-primary" onclick="openXFollow()">
                         <i class="fab fa-x-twitter"></i>
                         Follow @db0sz1
                     </button>
@@ -626,10 +628,6 @@ function showFollowModal() {
     `;
     
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Attach event listeners after modal is created
-    document.getElementById('dismissFollowBtn').addEventListener('click', dismissFollowModal);
-    document.getElementById('followBtn').addEventListener('click', openXFollow);
     
     // Prevent closing by clicking outside
     document.getElementById('followModal').addEventListener('click', function(e) {
@@ -686,141 +684,112 @@ async function dismissFollowModal() {
         console.error('Failed to dismiss modal:', error);
     }
 }
-
-// DOMContentLoaded event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Attach event listeners for upgrade buttons
-    const upgradeButtons = document.querySelectorAll('.pricing-modal-btn');
-    
-    upgradeButtons.forEach(button => {
-        // Skip disabled buttons (current plan)
-        if (!button.disabled) {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Get tier and planId from the parent card
-                const card = this.closest('.pricing-modal-card');
-                const tierName = card.querySelector('.pricing-modal-name').textContent.toLowerCase();
-                const planId = card.dataset.planId || tierName;
-                
-                console.log('Upgrade clicked - Tier:', tierName, 'PlanId:', planId);
-                
-                upgradeToPlan(tierName, planId, this);
-            });
-        }
-    });
-    
-    // Setup upgrade button modal trigger
-    const upgradeBtn = document.getElementById('upgradeBtn');
-    if (upgradeBtn) {
-        upgradeBtn.addEventListener('click', () => {
-            loadUpgradeModal();
-            document.getElementById('upgradeModal').classList.add('active');
-        });
-    }
-    
-    // Check follow status after auth is ready
-    setTimeout(initFollowModal, 500);
-    
-    // Load total scans count
-    loadTotalScans();
-    
-    // Check if user is admin and show admin link
-    checkAdminStatus();
-});
-
-/**
- * Check if user is admin and show admin nav link if true
- */
-async function checkAdminStatus() {
-    try {
-        // First check if admin status is stored in localStorage (from login)
-        const storedAdminStatus = localStorage.getItem('is_admin');
-        console.log('Stored admin status from localStorage:', storedAdminStatus);
-        
-        let isAdmin = storedAdminStatus === 'true';
-        
-        // If not in localStorage, try to fetch from API
-        if (!isAdmin) {
-            const response = await API.getCurrentUser();
-            console.log('Admin status check - API response:', response);
-            
-            // Check both is_admin and admin fields (API might use either)
-            isAdmin = response && (response.is_admin === true || response.admin === true);
-        }
-        
-        console.log('Is user admin?', isAdmin);
-        
-        if (isAdmin) {
-            // Show admin nav link
-            const adminLink = document.getElementById('adminNavLink');
-            if (adminLink) {
-                adminLink.style.display = 'flex';
-                // Store admin status for later use
-                localStorage.setItem('is_admin', 'true');
-                console.log('✅ Admin link shown');
-            } else {
-                console.warn('Admin link element not found');
-            }
-        } else {
-            // Hide admin link and clear admin status
-            const adminLink = document.getElementById('adminNavLink');
-            if (adminLink) {
-                adminLink.style.display = 'none';
-            }
-            localStorage.removeItem('is_admin');
-            console.log('Admin link hidden - user not admin');
-        }
-    } catch (error) {
-        console.error('Failed to check admin status:', error);
-        // Hide admin link on error
-        const adminLink = document.getElementById('adminNavLink');
-        if (adminLink) {
-            adminLink.style.display = 'none';
-        }
-    }
-}
-
-async function loadTotalScans() {
-    try {
-        const result = await API.getDashboardStats();
-        let totalScans = 0;
-        
-        // Extract monthly_scans from dashboard stats API response
-        if (result && result.monthly_scans !== undefined) {
-            totalScans = result.monthly_scans;
-        } else if (result && result.total) {
-            totalScans = result.total;
-        } else if (result && Array.isArray(result.scans)) {
-            totalScans = result.scans.length;
-        } else if (Array.isArray(result)) {
-            totalScans = result.length;
-        }
-        
-        // Update the stats card
-        const statsValue = document.getElementById('totalScansValue');
-        const statsDesc = document.getElementById('totalScansDesc');
-        
-        if (statsValue) {
-            statsValue.textContent = totalScans;
-        }
-        if (statsDesc) {
-            statsDesc.textContent = totalScans === 1 ? 'Scan in this account' : 'Scans in this account';
-        }
-    } catch (error) {
-        console.error('Failed to load total scans:', error);
-        // Keep default 0 if error
-        const statsValue = document.getElementById('totalScansValue');
-        if (statsValue) {
-            statsValue.textContent = '0';
-        }
-    }
-}
 </script>
+    <script src="assets/js/dash.js"></script>
+    
+    <!-- Initialize Follow Modal on Load -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check follow status after auth is ready
+            setTimeout(initFollowModal, 500);
+            
+            // Load total scans count
+            loadTotalScans();
+            
+            // Check if user is admin and show admin link
+            checkAdminStatus();
+        });
+        
+        /**
+         * Check if user is admin and show admin nav link if true
+         */
+        async function checkAdminStatus() {
+            try {
+                // First check if admin status is stored in localStorage (from login)
+                const storedAdminStatus = localStorage.getItem('is_admin');
+                console.log('Stored admin status from localStorage:', storedAdminStatus);
+                
+                let isAdmin = storedAdminStatus === 'true';
+                
+                // If not in localStorage, try to fetch from API
+                if (!isAdmin) {
+                    const response = await API.getCurrentUser();
+                    console.log('Admin status check - API response:', response);
+                    
+                    // Check both is_admin and admin fields (API might use either)
+                    isAdmin = response && (response.is_admin === true || response.admin === true);
+                }
+                
+                console.log('Is user admin?', isAdmin);
+                
+                if (isAdmin) {
+                    // Show admin nav link
+                    const adminLink = document.getElementById('adminNavLink');
+                    if (adminLink) {
+                        adminLink.style.display = 'flex';
+                        // Store admin status for later use
+                        localStorage.setItem('is_admin', 'true');
+                        console.log('✅ Admin link shown');
+                    } else {
+                        console.warn('Admin link element not found');
+                    }
+                } else {
+                    // Hide admin link and clear admin status
+                    const adminLink = document.getElementById('adminNavLink');
+                    if (adminLink) {
+                        adminLink.style.display = 'none';
+                    }
+                    localStorage.removeItem('is_admin');
+                    console.log('Admin link hidden - user not admin');
+                }
+            } catch (error) {
+                console.error('Failed to check admin status:', error);
+                // Hide admin link on error
+                const adminLink = document.getElementById('adminNavLink');
+                if (adminLink) {
+                    adminLink.style.display = 'none';
+                }
+            }
+        }
+        
+        async function loadTotalScans() {
+            try {
+                const result = await API.getDashboardStats();
+                let totalScans = 0;
+                
+                // Extract monthly_scans from dashboard stats API response
+                if (result && result.monthly_scans !== undefined) {
+                    totalScans = result.monthly_scans;
+                } else if (result && result.total) {
+                    totalScans = result.total;
+                } else if (result && Array.isArray(result.scans)) {
+                    totalScans = result.scans.length;
+                } else if (Array.isArray(result)) {
+                    totalScans = result.length;
+                }
+                
+                // Update the stats card
+                const statsValue = document.getElementById('totalScansValue');
+                const statsDesc = document.getElementById('totalScansDesc');
+                
+                if (statsValue) {
+                    statsValue.textContent = totalScans;
+                }
+                if (statsDesc) {
+                    statsDesc.textContent = totalScans === 1 ? 'Scan in this account' : 'Scans in this account';
+                }
+            } catch (error) {
+                console.error('Failed to load total scans:', error);
+                // Keep default 0 if error
+                const statsValue = document.getElementById('totalScansValue');
+                if (statsValue) {
+                    statsValue.textContent = '0';
+                }
+            }
+        }
+    </script>
 
-<script src="assets/js/dash.js"></script>
-
-<!-- Toast Container -->
-<div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 12px; max-width: 400px;"></div>
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 12px; max-width: 400px;"></div>
 </body>
 </html>

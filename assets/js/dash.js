@@ -460,14 +460,16 @@ async function startScanning() {
         console.log('Error object:', error);
         console.log('error.error:', error.error);
         console.log('error.message:', error.message);
+        console.log('error.detail:', error.detail);
         
         // Check if error is about insufficient credits
         if (error.error === 'insufficient_credits' || (error.message && error.message.includes('insufficient_credits'))) {
             console.log('🔴 CAUGHT: Insufficient credits error - showing modal');
             showInsufficientCreditsModal(error);
         } 
-        // Check if error is about no niches
-        else if (error.message && error.message.includes('No active niches')) {
+        // Check if error is about no niches (checks message, detail, and full text)
+        else if ((error.message && error.message.toLowerCase().includes('niche')) || 
+                 (error.detail && error.detail.toLowerCase().includes('niche'))) {
             console.log('🔴 CAUGHT: No niches error - showing modal');
             showNoNichesModal();
         } else {

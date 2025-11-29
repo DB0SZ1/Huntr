@@ -941,6 +941,46 @@ body {
     transform: translateY(0);
 }
 
+/* Server Status Toggle Button */
+.status-toggle-btn {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.status-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.status-toggle-btn .toggle-switch {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    left: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-toggle-btn.active {
+    background: #ef4444;
+    border-color: #dc2626;
+}
+
+.status-toggle-btn.active .toggle-switch {
+    left: calc(100% - 26px);
+    background: white;
+}
+
 .stop-scan-btn {
     width: 100%;
     padding: 14px;

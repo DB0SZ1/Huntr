@@ -797,5 +797,67 @@ async function dismissFollowModal() {
 
     <!-- Toast Container -->
     <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 12px; max-width: 400px;"></div>
+
+    <!-- Server Down Modal (dynamically inserted) -->
+    <script>
+        // Show server down modal if maintenance mode is enabled
+        function showServerDownModal() {
+            const isServerDown = localStorage.getItem('serverDownStatus') === 'true';
+            
+            if (!isServerDown) {
+                return; // Server is online, don't show modal
+            }
+            
+            // Check if modal is already shown
+            if (document.getElementById('serverDownModal')) {
+                return;
+            }
+            
+            const modalHTML = `
+                <div id="serverDownModal" class="modal-overlay" style="z-index: 9999;">
+                    <div class="modal-content" style="max-width: 420px; text-align: center;">
+                        <div style="margin-bottom: 24px;">
+                            <i class="fas fa-server" style="font-size: 64px; color: #ef4444; margin-bottom: 16px; display: block;"></i>
+                            <h2 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700; color: white;">Server Maintenance</h2>
+                            <p style="margin: 0; color: rgba(255, 255, 255, 0.7); font-size: 14px;">We're currently under maintenance</p>
+                        </div>
+                        
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                            <p style="margin: 0; color: rgba(255, 255, 255, 0.8); font-size: 15px; line-height: 1.6;">
+                                We have sent out all opportunities to users for the day. Please come back tomorrow so that you'll receive the best.
+                            </p>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="dismissServerDownModal()" style="width: 100%;">
+                            Got it
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        function dismissServerDownModal() {
+            const modal = document.getElementById('serverDownModal');
+            if (modal) {
+                modal.style.opacity = '0';
+                modal.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+        
+        // Show modal when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(showServerDownModal, 500);
+        });
+        
+        // Also listen for storage changes (when admin toggles on another tab)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'serverDownStatus' && e.newValue === 'true') {
+                showServerDownModal();
+            }
+        });
+    </script>
 </body>
 </html>

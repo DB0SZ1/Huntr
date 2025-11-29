@@ -73,6 +73,23 @@ async function loadOverviewPage() {
                 <p style="color: rgba(255, 255, 255, 0.6); margin-top: 8px;">System statistics and key metrics</p>
             </div>
 
+            <!-- Server Status Control -->
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <i class="fas fa-server" style="font-size: 24px; color: #f97316;"></i>
+                    <div>
+                        <h3 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600;">Server Status</h3>
+                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 13px;">Toggle server maintenance mode</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span id="serverStatusText" style="color: #10b981; font-weight: 600; font-size: 14px;">Online</span>
+                    <button id="serverStatusToggle" class="status-toggle-btn" onclick="toggleServerStatus()">
+                        <span class="toggle-switch"></span>
+                    </button>
+                </div>
+            </div>
+
             <!-- Stats Cards -->
             <div class="stats-grid-admin">
                 ${renderStatCard(
@@ -125,6 +142,9 @@ async function loadOverviewPage() {
         `;
 
         adminContent.innerHTML = html;
+
+        // Initialize server status toggle
+        initServerStatus();
 
         // Load revenue breakdown
         loadRevenueBreakdown();
@@ -282,4 +302,53 @@ function renderActivityTable(activity) {
     `;
 
     return html;
+}
+
+/**
+ * Toggle server maintenance status
+ * When enabled, shows a modal on user pages
+ */
+function toggleServerStatus() {
+    const toggleBtn = document.getElementById('serverStatusToggle');
+    const statusText = document.getElementById('serverStatusText');
+    
+    // Get current state
+    let isServerDown = localStorage.getItem('serverDownStatus') === 'true';
+    
+    // Toggle the state
+    isServerDown = !isServerDown;
+    
+    // Save to localStorage
+    localStorage.setItem('serverDownStatus', isServerDown);
+    
+    // Update UI
+    toggleBtn.classList.toggle('active', isServerDown);
+    statusText.textContent = isServerDown ? 'Maintenance' : 'Online';
+    statusText.style.color = isServerDown ? '#ef4444' : '#10b981';
+    
+    // Show confirmation
+    showToast(
+        isServerDown ? 'Server maintenance mode enabled' : 'Server maintenance mode disabled',
+        isServerDown ? 'warning' : 'success'
+    );
+    
+    console.log('Server status toggled:', isServerDown ? 'DOWN' : 'UP');
+}
+
+/**
+ * Initialize server status on page load
+ */
+function initServerStatus() {
+    const toggleBtn = document.getElementById('serverStatusToggle');
+    const statusText = document.getElementById('serverStatusText');
+    
+    if (!toggleBtn || !statusText) return;
+    
+    // Check current state from localStorage
+    const isServerDown = localStorage.getItem('serverDownStatus') === 'true';
+    
+    // Update UI to reflect current state
+    toggleBtn.classList.toggle('active', isServerDown);
+    statusText.textContent = isServerDown ? 'Maintenance' : 'Online';
+    statusText.style.color = isServerDown ? '#ef4444' : '#10b981';
 }
